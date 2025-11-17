@@ -319,6 +319,8 @@
         let longCooldown = false;
 
         let tweets = [];
+        let usedTweets = [];
+
         try {
             const response = await fetch('tweets.json');
             tweets = await response.json();
@@ -331,20 +333,26 @@
         links.forEach(link => {
             link.addEventListener('click', () => {
                 if (longCooldown) return;
+
                 clickCount++;
 
                 const type = link.getAttribute('data-link-type');
                 let src = '';
 
                 if (type === 'pre' && tweets.length > 0) {
-                    const randomIndex = Math.floor(Math.random() * tweets.length);
-                    src = tweets[randomIndex];
+                    const availableTweets = tweets.filter(t => !usedTweets.includes(t));
+
+                    const randomIndex = Math.floor(Math.random() * availableTweets.length);
+                    src = availableTweets[randomIndex];
+
+                    usedTweets.push(src);
+                } else {
+                    src = link.getAttribute('data-link-src') || '';
                 }
 
                 window.open(GLOBAL__contentPrefix + src + GLOBAL__contentSuffix);
 
                 let seconds = Math.floor(Math.random() * (20 - 10 + 1)) + 10;
-
                 links.forEach(l => {
                     l.style.pointerEvents = 'none';
                     l.style.opacity = '0.5';
@@ -366,10 +374,11 @@
                 }, 1000);
 
                 if (clickCount >= 5) {
-                    longCooldown = true;
                     clickCount = 0;
-                    let longSeconds = Math.floor(Math.random() * (10 * 60 - 5 * 60 + 1)) + 5 * 60;
+                    usedTweets = [];
 
+                    longCooldown = true;
+                    let longSeconds = Math.floor(Math.random() * (10 * 60 - 5 * 60 + 1)) + 5 * 60;
                     const longCountdown = setInterval(() => {
                         longSeconds--;
                         let minutesLeft = Math.ceil(longSeconds / 60);
