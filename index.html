@@ -318,6 +318,7 @@
 
         let clickCount = 0;
         let longCooldown = false;
+        let lastClickTime = Date.now(); // track user activity
 
         let tweets = [];
         let usedTweets = [];
@@ -335,6 +336,7 @@
             link.addEventListener('click', () => {
                 if (longCooldown) return;
 
+                lastClickTime = Date.now();
                 clickCount++;
 
                 const type = link.getAttribute('data-link-type');
@@ -342,8 +344,9 @@
 
                 if (type === 'pre' && tweets.length > 0) {
                     const availableTweets = tweets.filter(t => !usedTweets.includes(t));
-                    if (availableTweets.length === 0) usedTweets = []; // reset if all used
+                    if (availableTweets.length === 0) usedTweets = [];
                     const newAvailable = tweets.filter(t => !usedTweets.includes(t));
+
                     const randomIndex = Math.floor(Math.random() * newAvailable.length);
                     src = newAvailable[randomIndex];
                     usedTweets.push(src);
@@ -374,7 +377,6 @@
                     }
                 }, 1000);
 
-                // Reset usedTweets after 5 clicks (tweet reuse logic)
                 if (clickCount >= 5) {
                     clickCount = 0;
                     usedTweets = [];
@@ -382,13 +384,25 @@
             });
         });
 
+        // Long Cooldown Manager
         setInterval(() => {
             if (longCooldown) return;
-            longCooldown = true;
+
+            const now = Date.now();
+            const inactivityMinutes = (now - lastClickTime) / 1000 / 60;
+
             let longSeconds = Math.floor(Math.random() * (15 * 60 - 10 * 60 + 1)) + 10 * 60;
+
+            if (inactivityMinutes > 1) {
+                const reduction = inactivityMinutes * 90;
+                longSeconds = Math.max(120, longSeconds - reduction);
+            }
+
+            longCooldown = true;
 
             const longCountdown = setInterval(() => {
                 longSeconds--;
+
                 let minutesLeft = Math.ceil(longSeconds / 60);
                 timer.textContent = `Pause, it's time for a break! Wait for ${minutesLeft} minute(s) to tweet again`;
 
@@ -396,8 +410,10 @@
                     clearInterval(longCountdown);
                     longCooldown = false;
                     timer.textContent = 'Ready!';
+                    lastClickTime = Date.now();
                 }
             }, 1000);
+
         }, 60 * 1000);
     }
 
