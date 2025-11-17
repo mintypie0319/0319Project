@@ -163,7 +163,7 @@
         <div class="section-top-generate">
             <div class="wrapper">
                 <div class="timer-top-primary js-link__timer">Ready!</div>
-                <div class="link-top-primary js-link__toggle" data-link-src="https://twitter.com/intent/tweet?text=SAKURA%20Dream%20To%20Tokyo%20Dome%0A%23IntoSAKURADreamWorld%0A%23%E5%AE%AE%E8%84%87%E5%92%B2%E8%89%AF">Click to Tweet!</div>
+                <div class="link-top-primary js-link__toggle" data-link-src="https://x.com/intent/post?text=SAKURA%20Dream%20To%20Tokyo%20Dome%0A%23IntoSAKURADreamWorld%0A%23%E5%AE%AE%E8%84%87%E5%92%B2%E8%89%AF">Click to Tweet!</div>
             </div>
         </div>
     </main>
@@ -257,14 +257,21 @@
 
             const src = link.getAttribute('data-link-src');
             const appUrl = src.replace(/^https?:\/\//, 'twitter://');
+
+            // Try opening X app
             window.location.href = appUrl;
+
+            // Fallback to browser after short delay
             setTimeout(() => {
                 window.open(src, '_blank');
             }, 500);
+
+            // Short cooldown
             let seconds = Math.floor(Math.random() * (30 - 15 + 1)) + 15;
             link.style.pointerEvents = 'none';
             link.style.opacity = '0.5';
             timer.textContent = `${seconds} seconds left to tweet (to avoid flagged as spam)`;
+
             const shortCountdown = setInterval(() => {
                 seconds--;
                 if (seconds > 0) {
@@ -276,16 +283,18 @@
                     link.style.opacity = '';
                 }
             }, 1000);
+
+            // Long cooldown after 5 clicks
             if (clickCount >= 5) {
                 longCooldown = true;
                 clickCount = 0;
                 let longSeconds = Math.floor(Math.random() * (10 * 60 - 5 * 60 + 1)) + 5 * 60;
-                link.style.pointerEvents = 'none';
-                link.style.opacity = '0.5';
+
                 const longCountdown = setInterval(() => {
                     longSeconds--;
                     let minutesLeft = Math.ceil(longSeconds / 60);
                     timer.textContent = `Pause, it's time for a break! This will avoid your account from being flagged as a bot! Wait for ${minutesLeft} minute(s) to tweet again`;
+
                     if (longSeconds <= 0) {
                         clearInterval(longCountdown);
                         longCooldown = false;
@@ -297,6 +306,7 @@
             }
         };
     }
+
 
     countdown();
     generate();
