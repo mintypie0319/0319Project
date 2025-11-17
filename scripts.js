@@ -21,7 +21,8 @@ let timeJST = new Date();
 let isTweetsInit = false;
 
 // ===== Labels based on language =====
-const LABELS = LANG === 'zh-cn' ? {
+const GLOBAL_LABELS = LANG === 'zh-cn' ? {
+    waitForAPI: '正在获取时间，请稍候…',
     ready: '准备好了！',
     clickWhenPhase1: '阶段 1 开始时点击发推',
     shortCooldown: '秒后可再次发推',
@@ -31,6 +32,7 @@ const LABELS = LANG === 'zh-cn' ? {
     phase1Started: '阶段 1 已开始！剩余时间：<strong>{h}小时 {m}分钟 {s}秒</strong>',
     phase2Started: '阶段 2 已开始！剩余时间：<strong>{h}小时 {m}分钟 {s}秒</strong>'
 } : {
+    waitForAPI: 'Fetching time, please wait…',
     ready: 'Ready!',
     clickWhenPhase1: 'Click to tweet when Phase 1 starts',
     shortCooldown: 'seconds left to tweet',
@@ -70,18 +72,18 @@ function updateCountdownDisplay() {
 
     if (timeJST < GLOBAL_TIMES.phase1Start) {
         const { hours, minutes, seconds } = formatTime(GLOBAL_TIMES.phase1Start - timeJST);
-        output.innerHTML = LABELS.timeUntilEvent
+        output.innerHTML = GLOBAL_LABELS.timeUntilEvent
             .replace('{h}', hours)
             .replace('{m}', minutes)
             .replace('{s}', seconds);
         GLOBAL.phase = 0;
         links.forEach(l => { l.style.pointerEvents = 'none'; l.style.opacity = '0.5'; });
         const timer = document.querySelector(GLOBAL_SELECTORS.timer);
-        if (timer) timer.innerHTML = LABELS.clickWhenPhase1;
+        if (timer) timer.innerHTML = GLOBAL_LABELS.clickWhenPhase1;
 
     } else if (timeJST >= GLOBAL_TIMES.phase1Start && timeJST < GLOBAL_TIMES.phase2Start) {
         const { hours, minutes, seconds } = formatTime(GLOBAL_TIMES.phase2Start - timeJST);
-        output.innerHTML = LABELS.phase1Started
+        output.innerHTML = GLOBAL_LABELS.phase1Started
             .replace('{h}', hours)
             .replace('{m}', minutes)
             .replace('{s}', seconds);
@@ -98,7 +100,7 @@ function updateCountdownDisplay() {
 
     } else if (timeJST >= GLOBAL_TIMES.phase2Start) {
         const { hours, minutes, seconds } = formatTime(GLOBAL_TIMES.phase2End - timeJST);
-        output.innerHTML = LABELS.phase2Started
+        output.innerHTML = GLOBAL_LABELS.phase2Started
             .replace('{h}', hours)
             .replace('{m}', minutes)
             .replace('{s}', seconds);
@@ -163,15 +165,15 @@ async function initTweetLinks() {
     function startShortCooldown(timer, links) {
         let seconds = Math.floor(Math.random() * 11) + 10;
         links.forEach(l => { l.style.pointerEvents = 'none'; l.style.opacity = '0.5'; });
-        timer.innerHTML = `${seconds} ${LABELS.shortCooldown}`;
+        timer.innerHTML = `${seconds} ${GLOBAL_LABELS.shortCooldown}`;
 
         const interval = setInterval(() => {
             seconds--;
             if (seconds > 0) {
-                timer.innerHTML = `${seconds} ${LABELS.shortCooldown}`;
+                timer.innerHTML = `${seconds} ${GLOBAL_LABELS.shortCooldown}`;
             } else {
                 clearInterval(interval);
-                timer.innerHTML = LABELS.clickAgain;
+                timer.innerHTML = GLOBAL_LABELS.clickAgain;
                 links.forEach(l => { l.style.pointerEvents = ''; l.style.opacity = ''; });
             }
         }, 1000);
@@ -193,12 +195,12 @@ async function initTweetLinks() {
         const interval = setInterval(() => {
             longSeconds--;
             const minutesLeft = Math.ceil(longSeconds / 60);
-            timer.innerHTML = LABELS.longPause.replace('{minutes}', minutesLeft);
+            timer.innerHTML = GLOBAL_LABELS.longPause.replace('{minutes}', minutesLeft);
 
             if (longSeconds <= 0) {
                 clearInterval(interval);
                 longCooldown = false;
-                timer.innerHTML = LABELS.clickAgain;
+                timer.innerHTML = GLOBAL_LABELS.clickAgain;
                 lastClickTime = Date.now();
             }
         }, 1000);
@@ -207,6 +209,9 @@ async function initTweetLinks() {
 
 // ===== Countdown =====
 async function initCountdown() {
+    const timer = document.querySelector(GLOBAL_SELECTORS.timer);
+    if (timer) timer.innerHTML = GLOBAL_LABELS.waitForAPI ;
+
     await fetchTime(); 
 
     setInterval(() => {
