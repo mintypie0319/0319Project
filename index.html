@@ -390,7 +390,7 @@
             const now = Date.now();
             const inactivityMinutes = (now - lastClickTime) / 1000 / 60;
 
-            let longSeconds = Math.floor(Math.random() * (15 * 60 - 10 * 60 + 1)) + 10 * 60;
+            let longSeconds = Math.floor(Math.random() * (7 * 60 - 2 * 60 + 1)) + 2 * 60;
 
             longSeconds -= inactivityMinutes * 60;
             if (longSeconds < 0) longSeconds = 0;
