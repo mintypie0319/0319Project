@@ -28,12 +28,13 @@ let GLOBAL_INTERVALINIT = null;
 let GLOBAL_INTERVALFETCH = null;
 let GLOBAL_INTERVALCOUNTDOWN = null;
 
-let GLOBAL_ISSHORTCOUNTDOWNSTARTED = false;
+let GLOBAL_ISCOUNTDOWNSTARTED = false;
+
+let GLOBAL_CLICKEDTIMES = 0;
 
 // ===== Labels based on language =====
 const GLOBAL_LABELS = LANG === 'zh-cn' ? {
-    cooldownShort: '秒后可再次发推',
-    cooldownLong: '暂停，请等待 {minutes} 分钟',
+    cooldown: '秒后可再次发推',
     labelPreFetch: '正在获取时间，请稍候…',
     labelPre: '阶段 1 开始时点击发推',
     labelActive: '再次点击发推',
@@ -41,8 +42,7 @@ const GLOBAL_LABELS = LANG === 'zh-cn' ? {
     timerPhase1: '阶段 1 已开始！剩余时间：<strong>{h}小时 {m}分钟 {s}秒</strong>',
     timerPhase2: '阶段 2 已开始！剩余时间：<strong>{h}小时 {m}分钟 {s}秒</strong>'
 } : {
-    cooldownShort: 'seconds left to tweet',
-    cooldownLong: 'Pause, wait for {minutes} minute(s)',
+    cooldown: 'seconds left to tweet',
     labelPreFetch: 'Fetching time, please wait…',
     labelPre: 'Click to tweet when Phase 1 starts',
     labelActive: 'Click to tweet again',
@@ -123,7 +123,7 @@ function getTweet() {
 function setDOM() {
     const links = document.querySelectorAll(GLOBAL_SELECTORS.links);
     links.forEach(link => link.addEventListener('click', () => {
-        if (GLOBAL_ISSHORTCOUNTDOWNSTARTED) return;
+        if (GLOBAL_ISCOUNTDOWNSTARTED) return;
 
         const type = link.getAttribute('data-link-type');
         let content = '';
@@ -133,25 +133,35 @@ function setDOM() {
         }
 
         window.open(GLOBAL.contentPrefix + content + GLOBAL.contentSuffix);
-        setShortCountdown();
+        GLOBAL_CLICKEDTIMES++;
+        setCountdown();
     }));
 }
 
-function setShortCountdown() {
-    if (GLOBAL_ISSHORTCOUNTDOWNSTARTED) return;
-    GLOBAL_ISSHORTCOUNTDOWNSTARTED = true;
+function setCountdown() {
+    if (GLOBAL_ISCOUNTDOWNSTARTED) return;
+    GLOBAL_ISCOUNTDOWNSTARTED = true;
 
-    let duration = Math.floor(Math.random() * 11) + 10;
-    setLabel(`${duration} ${GLOBAL_LABELS.cooldownShort}`);
+    let duration;
+    const threshold = Math.floor(Math.random() * 11) + 10;
+
+    if (GLOBAL_CLICKEDTIMES > threshold) {
+        duration = Math.floor(Math.random() * (480 - 180 + 1)) + 180;
+        GLOBAL_CLICKEDTIMES = 0;
+    } else {
+        duration = Math.floor(Math.random() * 11) + 10;
+    }
+    
+    setLabel(`${duration} ${GLOBAL_LABELS.cooldown}`);
     disableLinks();
 
     GLOBAL_INTERVALCOUNTDOWN = setInterval(() => {
         duration--;
         if (duration > 0) {
-            setLabel(`${duration} ${GLOBAL_LABELS.cooldownShort}`);
+            setLabel(`${duration} ${GLOBAL_LABELS.cooldown}`);
             disableLinks();
         } else {
-            GLOBAL_ISSHORTCOUNTDOWNSTARTED = false;
+            GLOBAL_ISCOUNTDOWNSTARTED = false;
             setLabel(GLOBAL_LABELS.labelActive);
             enableLinks();
             clearInterval(GLOBAL_INTERVALCOUNTDOWN);
@@ -171,7 +181,7 @@ function updateDOM() {
         const { hours, minutes, seconds } = formatTime(GLOBAL_TIMES.phase2Start - GLOBAL_TIMECURRENT);
         GLOBAL.phase = 1;
         setTimer(GLOBAL_LABELS.timerPhase1.replace('{h}', hours).replace('{m}', minutes).replace('{s}', seconds));
-        if (!GLOBAL_ISSHORTCOUNTDOWNSTARTED) enableLinks();
+        if (!GLOBAL_ISCOUNTDOWNSTARTED) enableLinks();
         displayTutorial('1');
         if (!GLOBAL_ISEVENTSTARTED) {
             GLOBAL_ISEVENTSTARTED = true;
@@ -181,7 +191,7 @@ function updateDOM() {
         const { hours, minutes, seconds } = formatTime(GLOBAL_TIMES.phase2End - GLOBAL_TIMECURRENT);
         GLOBAL.phase = 2;
         setTimer(GLOBAL_LABELS.timerPhase2.replace('{h}', hours).replace('{m}', minutes).replace('{s}', seconds));
-        if (!GLOBAL_ISSHORTCOUNTDOWNSTARTED) enableLinks();
+        if (!GLOBAL_ISCOUNTDOWNSTARTED) enableLinks();
         displayTutorial('2');
         if (!GLOBAL_ISEVENTSTARTED) {
             GLOBAL_ISEVENTSTARTED = true;
@@ -223,7 +233,7 @@ async function init() {
     }
 
     if (!GLOBAL_INTERVALFETCH) {
-        GLOBAL_INTERVALFETCH = setInterval(fetchTime, 300000); // every 5 min
+        GLOBAL_INTERVALFETCH = setInterval(fetchTime, 300000);
     }
 
     setDOM();
