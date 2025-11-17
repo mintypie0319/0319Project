@@ -1,18 +1,14 @@
-* {
-    box-sizing: border-box;
-}
+@import url('https://fonts.googleapis.com/css2?family=Cantata+One&family=Noto+Serif+JP:wght@200..900&family=ZCOOL+XiaoWei&display=swap');
 
 body {
-    margin: 0;
-    padding: 0;
-    font-size: 20rem;
-    line-height: calc(30 / 20);
-    font-family: "Roboto", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: <weight>;
+    font-size: 16rem;
+    line-height: calc(24 / 16);
+    font-family: "Cantata One", "Noto Serif JP", "ZCOOL XiaoWei", sans-serif;
     font-style: normal;
-    font-variation-settings:
-        "wdth" 100;
+}
+
+main {
+    padding: 100rem 0;
 }
 
 .wrapper {
@@ -22,7 +18,6 @@ body {
 }
 
 .section-top {
-    padding: 100rem 0 50rem;
 }
 
 .section-top-instruction__progress-bar {
@@ -38,30 +33,53 @@ body {
 }
 
 .section-top-instruction__time {
-    padding-bottom: 30rem;
-    border-bottom: 10rem solid lightgray;
-    margin-bottom: 30rem;
+    font-size: 20rem;
     text-align: center;
     font-weight: 700;
 }
 
+.section-top-instruction__time strong {
+    font-size: 27rem;
+    font-weight: 900;
+    color: red;
+}
+
 .section-top-instruction {
-    padding: 0 0 100rem;
 }
 
 .section-top-instruction__tutorial {
-    margin-top: 30rem;
-}
-
-.section-top-instruction__tutorial-block {
-    margin-top: 20rem;
-    display: none;
-    font-size: 16rem;
+    display: flex;
+    flex-direction: column;
+    gap: 20rem;
     text-align: center;
 }
 
+.section-top-instruction__tutorial-block {
+    display: none;
+}
+
+.section-top-instruction__tutorial-block h2 {
+    margin: 0 0 10rem;
+    padding: 0;
+    display: block;
+    font-size: 18rem;
+    font-weight: 500;
+}
+
+.section-top-instruction__tutorial-block ul {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5rem;
+    list-style: none;
+}
+
 .section-top-generate {
-    padding: 0 0 50rem;
+}
+
+.breaker-top-primary {
+    margin: 30rem 0;
 }
 
 .title-top-primary {
@@ -94,9 +112,10 @@ body {
 }
 
 .timer-top-primary {
+    margin-bottom: 10rem;
     display: block;
     font-size: 18rem;
-    font-weight: 500;
+    font-weight: 700;
     text-align: center;
 }
 
@@ -118,7 +137,6 @@ body {
 }
 
 .quote-top-primary {
-    margin-top: 20rem;
     border: 3px solid lightgray;
     padding: 30rem 20rem;
     font-size: 16rem;
@@ -126,7 +144,6 @@ body {
 }
 
 .controller-top-primary {
-    margin-top: 30rem;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -149,10 +166,6 @@ body {
 @media (max-width: 767.98px) {
     html {
         font-size: calc(100vw / 375);
-    }
-
-    body {
-        font-size: 16rem;
     }
 
     .title-top-primary {

@@ -5,9 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="./normalize.css" rel="stylesheet">
     <link href="./styles.css" rel="stylesheet">
 </head>
 
@@ -22,6 +20,7 @@
                 </h1>
             </div>
         </div>
+        <hr class="breaker-top-primary">
         <div class="section-top-generate">
             <div class="wrapper">
                 <div class="timer-top-primary js-link__timer">Ready!</div>
@@ -31,35 +30,43 @@
                 </div>
             </div>
         </div>
+        <hr class="breaker-top-primary">
         <div class="section-top-instruction">
             <div class="wrapper">
-                <div class="section-top-instruction__progress js-time">
-                    <div class="section-top-instruction__time js-time__label"></div>
-                    <div class="section-top-instruction__tutorial">
-                        <div class="section-top-instruction__tutorial-block" style="display: block">
-                            Common rules:<br><br>
-                            ⭕ Regularly retweet other posts and comment on them with the same tags, just posting alone is not enough<br>
-                            ⭕ Add a line-break between your tweet's content and the tags. DO NOT remove the line-break<br>
-                        </div>
-                        <div class="section-top-instruction__tutorial-block js-time__tutorial-block" data-time-tutorial-toggle="1">
-                            Phase 1's rules:<br><br>
-                            ⭕ Must contain at least 15 words for each tweet<br>
-                            ❌ No GIFs<br>
-                            ❌ No Images<br>
-                            ❌ No Emojis
-                        </div>
-                        <div class="section-top-instruction__tutorial-block js-time__tutorial-block" data-time-tutorial-toggle="2">
-                            Phase 2's rules:<br><br>
-                            ❌ No Emojis
-                        </div>
-                        <div class="section-top-instruction__tutorial-block" style="display: block">
-                            <b>A good example:</b>
-                            <div class="quote-top-primary">
-                                SAKURA is the best in the world, no one has ever come close to her like EVER!<br><br>
-                                SAKURA Dream To Tokyo Dome<br>
-                                #IntoSAKURADreamWorld<br>
-                                #宮脇咲良
-                            </div>
+                <div class="section-top-instruction__time js-time__label"></div>
+            </div>
+            <hr class="breaker-top-primary">
+            <div class="wrapper">
+                <div class="section-top-instruction__tutorial">
+                    <div class="section-top-instruction__tutorial-block" style="display: block">
+                        <h2>Common rules:</h2>
+                        <ul>
+                            <li>⭕ Regularly retweet other posts and comment on them with the same tags, just posting alone is not enough</li>
+                            <li>⭕ Add a line-break between your tweet's content and the tags. DO NOT remove the line-break</li>
+                        </ul>
+                    </div>
+                    <div class="section-top-instruction__tutorial-block js-time__tutorial-block" data-time-tutorial-toggle="1">
+                        <h2>Phase 1's rules:</h2>
+                        <ul>
+                            <li>⭕ Must contain at least 15 words for each tweet</li>
+                            <li>❌ No GIFs</li>
+                            <li>❌ No Images (even videos)</li>
+                            <li>❌ No Emojis</li>
+                        </ul>
+                    </div>
+                    <div class="section-top-instruction__tutorial-block js-time__tutorial-block" data-time-tutorial-toggle="2">
+                        <h2>Phase 2's rules:</h2>
+                        <ul>
+                            <li>❌ No Emojis</li>
+                        </ul>
+                    </div>
+                    <div class="section-top-instruction__tutorial-block" style="display: block">
+                        <h2>A good example:</h2>
+                        <div class="quote-top-primary">
+                            SAKURA is the best in the world, no one has ever come close to her like EVER!<br><br>
+                            SAKURA Dream To Tokyo Dome<br>
+                            #IntoSAKURADreamWorld<br>
+                            #宮脇咲良
                         </div>
                     </div>
                 </div>

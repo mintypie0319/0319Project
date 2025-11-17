@@ -5,9 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="./normalize.css" rel="stylesheet">
     <link href="./styles.css" rel="stylesheet">
 </head>
 
@@ -22,6 +20,7 @@
                 </h1>
             </div>
         </div>
+        <hr class="breaker-top-primary">
         <div class="section-top-generate">
             <div class="wrapper">
                 <div class="timer-top-primary js-link__timer">准备好了！</div>
@@ -31,35 +30,43 @@
                 </div>
             </div>
         </div>
+        <hr class="breaker-top-primary">
         <div class="section-top-instruction">
             <div class="wrapper">
-                <div class="section-top-instruction__progress js-time">
-                    <div class="section-top-instruction__time js-time__label"></div>
-                    <div class="section-top-instruction__tutorial">
-                        <div class="section-top-instruction__tutorial-block" style="display: block">
-                            常规规则：<br><br>
-                            ⭕ 定期转发其他帖子并用相同标签评论，仅自己发帖是不够的<br>
-                            ⭕ 在你的推文内容和标签之间添加换行符。不要删除换行符
-                        </div>
-                        <div class="section-top-instruction__tutorial-block js-time__tutorial-block" data-time-tutorial-toggle="1">
-                            阶段 1 规则：<br><br>
-                            ⭕ 每条推文必须至少包含 15 个单词<br>
-                            ❌ 禁止使用 GIF<br>
-                            ❌ 禁止使用图片<br>
-                            ❌ 禁止使用表情符号
-                        </div>
-                        <div class="section-top-instruction__tutorial-block js-time__tutorial-block" data-time-tutorial-toggle="2">
-                            阶段 2 规则：<br><br>
-                            ❌ 禁止使用表情符号
-                        </div>
-                        <div class="section-top-instruction__tutorial-block" style="display: block">
-                            <b>一个好例子：</b>
-                            <div class="quote-top-primary">
-                                SAKURA 是世界上最棒的，没有人 EVER 能像她一样接近！<br><br>
-                                SAKURA Dream To Tokyo Dome<br>
-                                #IntoSAKURADreamWorld<br>
-                                #宮脇咲良
-                            </div>
+                <div class="section-top-instruction__time js-time__label"></div>
+            </div>
+            <hr class="breaker-top-primary">
+            <div class="wrapper">
+                <div class="section-top-instruction__tutorial">
+                    <div class="section-top-instruction__tutorial-block" style="display: block">
+                        <h2>常规规则：</h2>
+                        <ul>
+                            <li>⭕ 定期转发其他帖子并用相同标签评论，仅自己发帖是不够的</li>
+                            <li>⭕ 在你的推文内容和标签之间添加换行符。不要删除换行符</li>
+                        </ul>
+                    </div>
+                    <div class="section-top-instruction__tutorial-block js-time__tutorial-block" data-time-tutorial-toggle="1">
+                        <h2>阶段 1 规则：</h2>
+                        <ul>
+                            <li>⭕ 每条推文必须至少包含 15 个单词</li>
+                            <li>❌ 禁止使用 GIF + Videos</li>
+                            <li>❌ 禁止使用图片</li>
+                            <li>❌ 禁止使用表情符号</li>
+                        </ul>
+                    </div>
+                    <div class="section-top-instruction__tutorial-block js-time__tutorial-block" data-time-tutorial-toggle="2">
+                        <h2>阶段 2 规则：</h2>
+                        <ul>
+                            <li>❌ 禁止使用表情符号</li>
+                        </ul>
+                    </div>
+                    <div class="section-top-instruction__tutorial-block" style="display: block">
+                        <h2>一个好例子：</h2>
+                        <div class="quote-top-primary">
+                            SAKURA 是世界上最棒的，没有人 EVER 能像她一样接近！<br><br>
+                            SAKURA Dream To Tokyo Dome<br>
+                            #IntoSAKURADreamWorld<br>
+                            #宮脇咲良
                         </div>
                     </div>
                 </div>

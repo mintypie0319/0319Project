@@ -27,18 +27,18 @@ const LABELS = LANG === 'zh-cn' ? {
     shortCooldown: '秒后可再次发推',
     clickAgain: '再次点击发推',
     longPause: '暂停，请等待 {minutes} 分钟',
-    timeUntilEvent: '距离活动开始时间：{h}小时 {m}分钟 {s}秒',
-    phase1Started: '阶段 1 已开始！剩余时间：{h}小时 {m}分钟 {s}秒',
-    phase2Started: '阶段 2 已开始！剩余时间：{h}小时 {m}分钟 {s}秒'
+    timeUntilEvent: '距离活动开始时间：<strong>{h}小时 {m}分钟 {s}秒</strong>',
+    phase1Started: '阶段 1 已开始！剩余时间：<strong>{h}小时 {m}分钟 {s}秒</strong>',
+    phase2Started: '阶段 2 已开始！剩余时间：<strong>{h}小时 {m}分钟 {s}秒</strong>'
 } : {
     ready: 'Ready!',
     clickWhenPhase1: 'Click to tweet when Phase 1 starts',
     shortCooldown: 'seconds left to tweet',
     clickAgain: 'Click to tweet again',
     longPause: 'Pause, wait for {minutes} minute(s)',
-    timeUntilEvent: 'Time until the event starts: {h}h {m}m {s}s',
-    phase1Started: 'Phase 1 has started! Time left: {h}h {m}m {s}s',
-    phase2Started: 'Phase 2 has started! Time left: {h}h {m}m {s}s'
+    timeUntilEvent: 'Time until the event starts: <strong>{h}h {m}m {s}s</strong>',
+    phase1Started: 'Phase 1 has started! Time left: <strong>{h}h {m}m {s}s</strong>',
+    phase2Started: 'Phase 2 has started! Time left: <strong>{h}h {m}m {s}s</strong>'
 };
 
 // ====== FUNCTIONS ======
@@ -70,18 +70,18 @@ function updateCountdownDisplay() {
 
     if (timeJST < EVENT_TIMES.phase1Start) {
         const { hours, minutes, seconds } = formatTime(EVENT_TIMES.phase1Start - timeJST);
-        output.textContent = LABELS.timeUntilEvent
+        output.innerHTML = LABELS.timeUntilEvent
             .replace('{h}', hours)
             .replace('{m}', minutes)
             .replace('{s}', seconds);
         GLOBAL.phase = 0;
         links.forEach(l => { l.style.pointerEvents = 'none'; l.style.opacity = '0.5'; });
         const timer = document.querySelector(SELECTORS.timer);
-        if (timer) timer.textContent = LABELS.clickWhenPhase1;
+        if (timer) timer.innerHTML = LABELS.clickWhenPhase1;
 
     } else if (timeJST >= EVENT_TIMES.phase1Start && timeJST < EVENT_TIMES.phase2Start) {
         const { hours, minutes, seconds } = formatTime(EVENT_TIMES.phase2Start - timeJST);
-        output.textContent = LABELS.phase1Started
+        output.innerHTML = LABELS.phase1Started
             .replace('{h}', hours)
             .replace('{m}', minutes)
             .replace('{s}', seconds);
@@ -98,7 +98,7 @@ function updateCountdownDisplay() {
 
     } else if (timeJST >= EVENT_TIMES.phase2Start) {
         const { hours, minutes, seconds } = formatTime(EVENT_TIMES.phase2End - timeJST);
-        output.textContent = LABELS.phase2Started
+        output.innerHTML = LABELS.phase2Started
             .replace('{h}', hours)
             .replace('{m}', minutes)
             .replace('{s}', seconds);
@@ -163,15 +163,15 @@ async function initTweetLinks() {
     function startShortCooldown(timer, links) {
         let seconds = Math.floor(Math.random() * 11) + 10;
         links.forEach(l => { l.style.pointerEvents = 'none'; l.style.opacity = '0.5'; });
-        timer.textContent = `${seconds} ${LABELS.shortCooldown}`;
+        timer.innerHTML = `${seconds} ${LABELS.shortCooldown}`;
 
         const interval = setInterval(() => {
             seconds--;
             if (seconds > 0) {
-                timer.textContent = `${seconds} ${LABELS.shortCooldown}`;
+                timer.innerHTML = `${seconds} ${LABELS.shortCooldown}`;
             } else {
                 clearInterval(interval);
-                timer.textContent = LABELS.clickAgain;
+                timer.innerHTML = LABELS.clickAgain;
                 links.forEach(l => { l.style.pointerEvents = ''; l.style.opacity = ''; });
             }
         }, 1000);
@@ -193,12 +193,12 @@ async function initTweetLinks() {
         const interval = setInterval(() => {
             longSeconds--;
             const minutesLeft = Math.ceil(longSeconds / 60);
-            timer.textContent = LABELS.longPause.replace('{minutes}', minutesLeft);
+            timer.innerHTML = LABELS.longPause.replace('{minutes}', minutesLeft);
 
             if (longSeconds <= 0) {
                 clearInterval(interval);
                 longCooldown = false;
-                timer.textContent = LABELS.clickAgain;
+                timer.innerHTML = LABELS.clickAgain;
                 lastClickTime = Date.now();
             }
         }, 1000);
