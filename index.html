@@ -237,6 +237,8 @@
         const timeP2End = new Date('2025-11-19 00:00:00');
         let timeJST = new Date();
 
+        const links = document.querySelectorAll('.js-link__toggle');
+
         async function fetchTime() {
             try {
                 const response = await fetch('https://timeapi.io/api/time/current/zone?timeZone=Asia/Tokyo');
@@ -274,6 +276,13 @@
                 } = formatTime(timeP1Start - timeJST);
                 output.textContent = `Time until the event starts: ${hours}h ${minutes}m ${seconds}s`;
                 GLOBAL_phase = 0;
+
+                // Disable links before Phase 1
+                links.forEach(l => {
+                    l.style.pointerEvents = 'none';
+                    l.style.opacity = '0.5';
+                });
+
             } else if (timeJST >= timeP1Start && timeJST < timeP2Start) {
                 const {
                     hours,
@@ -282,6 +291,12 @@
                 } = formatTime(timeP2Start - timeJST);
                 output.textContent = `Phase 1 has started! Time left: ${hours}h ${minutes}m ${seconds}s`;
                 GLOBAL_phase = 1;
+
+                // Enable links for Phase 1
+                links.forEach(l => {
+                    l.style.pointerEvents = '';
+                    l.style.opacity = '';
+                });
 
                 tutorials.forEach(t => {
                     if (t.dataset.timeTutorialToggle === "1") t.style.display = "block";
@@ -294,6 +309,12 @@
                 } = formatTime(timeP2End - timeJST);
                 output.textContent = `Phase 2 has started! Time left: ${hours}h ${minutes}m ${seconds}s`;
                 GLOBAL_phase = 2;
+
+                // Ensure links are enabled
+                links.forEach(l => {
+                    l.style.pointerEvents = '';
+                    l.style.opacity = '';
+                });
 
                 tutorials.forEach(t => {
                     if (t.dataset.timeTutorialToggle === "2") t.style.display = "block";
@@ -335,6 +356,7 @@
         links.forEach(link => {
             link.addEventListener('click', () => {
                 if (longCooldown) return;
+                if (GLOBAL_phase === 0) return; // Prevent clicking before Phase 1
 
                 lastClickTime = Date.now();
                 clickCount++;
@@ -391,7 +413,6 @@
             const inactivityMinutes = (now - lastClickTime) / 1000 / 60;
 
             let longSeconds = Math.floor(Math.random() * (7 * 60 - 2 * 60 + 1)) + 2 * 60;
-
             longSeconds -= inactivityMinutes * 60;
             if (longSeconds < 0) longSeconds = 0;
 
