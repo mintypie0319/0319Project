@@ -245,8 +245,8 @@
 
         if (!link || !timer) return;
 
-        let clickCount = 0; // count user clicks
-        let longCooldown = false; // flag for long break
+        let clickCount = 0;
+        let longCooldown = false;
 
         timer.textContent = 'Ready!';
 
@@ -254,8 +254,13 @@
             e.preventDefault();
             if (longCooldown) return;
             clickCount++;
+
             const src = link.getAttribute('data-link-src');
-            window.open(src, '_blank');
+            const appUrl = src.replace(/^https?:\/\//, 'twitter://');
+            window.location.href = appUrl;
+            setTimeout(() => {
+                window.open(src, '_blank');
+            }, 500);
             let seconds = Math.floor(Math.random() * (30 - 15 + 1)) + 15;
             link.style.pointerEvents = 'none';
             link.style.opacity = '0.5';
@@ -273,7 +278,7 @@
             }, 1000);
             if (clickCount >= 5) {
                 longCooldown = true;
-                clickCount = 0; 
+                clickCount = 0;
                 let longSeconds = Math.floor(Math.random() * (10 * 60 - 5 * 60 + 1)) + 5 * 60;
                 link.style.pointerEvents = 'none';
                 link.style.opacity = '0.5';
@@ -292,6 +297,7 @@
             }
         };
     }
+
     countdown();
     generate();
 </script>
