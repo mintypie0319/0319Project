@@ -17,8 +17,8 @@ const GLOBAL_SELECTORS = {
     tutorials: '.js-time__tutorial-block'
 };
 
-let timeJST = new Date();
-let isTweetsInit = false;
+let GLOBAL_TIMECURRENT = null;
+let GLOBAL_ISTWEETREADY = false;
 
 // ===== Labels based on language =====
 const GLOBAL_LABELS = LANG === 'zh-cn' ? {
@@ -53,9 +53,9 @@ function formatTime(diff) {
 
 async function fetchTime() {
     try {
-        const response = await fetch('https://timeapi.io/api/time/current/zone?timeZone=Asia/Tokyo');
+        const response = await fetch('http://worldtimeapi.org/api/timezone/Asia/Tokyo');
         const data = await response.json();
-        timeJST = new Date(data.dateTime);
+        GLOBAL_TIMECURRENT = new Date(data.datetime.toString().split('+')[0]);
         updateCountdownDisplay();
     } catch (error) {
         console.error('Error fetching time:', error);
@@ -70,8 +70,8 @@ function updateCountdownDisplay() {
 
     if (!output) return;
 
-    if (timeJST < GLOBAL_TIMES.phase1Start) {
-        const { hours, minutes, seconds } = formatTime(GLOBAL_TIMES.phase1Start - timeJST);
+    if (GLOBAL_TIMECURRENT < GLOBAL_TIMES.phase1Start) {
+        const { hours, minutes, seconds } = formatTime(GLOBAL_TIMES.phase1Start - GLOBAL_TIMECURRENT);
         output.innerHTML = GLOBAL_LABELS.timeUntilEvent
             .replace('{h}', hours)
             .replace('{m}', minutes)
@@ -81,8 +81,8 @@ function updateCountdownDisplay() {
         const timer = document.querySelector(GLOBAL_SELECTORS.timer);
         if (timer) timer.innerHTML = GLOBAL_LABELS.clickWhenPhase1;
 
-    } else if (timeJST >= GLOBAL_TIMES.phase1Start && timeJST < GLOBAL_TIMES.phase2Start) {
-        const { hours, minutes, seconds } = formatTime(GLOBAL_TIMES.phase2Start - timeJST);
+    } else if (GLOBAL_TIMECURRENT >= GLOBAL_TIMES.phase1Start && GLOBAL_TIMECURRENT < GLOBAL_TIMES.phase2Start) {
+        const { hours, minutes, seconds } = formatTime(GLOBAL_TIMES.phase2Start - GLOBAL_TIMECURRENT);
         output.innerHTML = GLOBAL_LABELS.phase1Started
             .replace('{h}', hours)
             .replace('{m}', minutes)
@@ -93,13 +93,13 @@ function updateCountdownDisplay() {
             if (t.getAttribute('data-time-tutorial-toggle') === "1") t.style.display = "block";
         });
 
-        if (!isTweetsInit) {
+        if (!GLOBAL_ISTWEETREADY) {
             initTweetLinks();
-            isTweetsInit = true;
+            GLOBAL_ISTWEETREADY = true;
         }
 
-    } else if (timeJST >= GLOBAL_TIMES.phase2Start) {
-        const { hours, minutes, seconds } = formatTime(GLOBAL_TIMES.phase2End - timeJST);
+    } else if (GLOBAL_TIMECURRENT >= GLOBAL_TIMES.phase2Start) {
+        const { hours, minutes, seconds } = formatTime(GLOBAL_TIMES.phase2End - GLOBAL_TIMECURRENT);
         output.innerHTML = GLOBAL_LABELS.phase2Started
             .replace('{h}', hours)
             .replace('{m}', minutes)
@@ -110,9 +110,9 @@ function updateCountdownDisplay() {
             if (t.getAttribute('data-time-tutorial-toggle') === "2") t.style.display = "block";
         });
 
-        if (!isTweetsInit) {
+        if (!GLOBAL_ISTWEETREADY) {
             initTweetLinks();
-            isTweetsInit = true;
+            GLOBAL_ISTWEETREADY = true;
         }
     }
 }
@@ -215,7 +215,7 @@ async function initCountdown() {
     await fetchTime(); 
 
     setInterval(() => {
-        timeJST = new Date(timeJST.getTime() + 1000);
+        GLOBAL_TIMECURRENT = new Date(GLOBAL_TIMECURRENT.getTime() + 1000);
         updateCountdownDisplay();
     }, 1000);
 
