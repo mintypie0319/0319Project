@@ -218,8 +218,8 @@
             <div class="wrapper">
                 <div class="timer-top-primary js-link__timer">Ready!</div>
                 <div class="controller-top-primary">
-                    <div class="link-top-primary js-link__toggle" data-link-src="https://x.com/intent/tweet?text=%0A%0ASAKURA%20Dream%20To%20Tokyo%20Dome%0A%23IntoSAKURADreamWorld%0A%23%E5%AE%AE%E8%84%87%E5%92%B2%E8%89%AF">Click to Tweet <small>(for lazy bitches)</small></small></div>
-                    <div class="link-top-primary js-link__toggle" data-link-src="https://x.com/intent/tweet?text=%0A%0ASAKURA%20Dream%20To%20Tokyo%20Dome%0A%23IntoSAKURADreamWorld%0A%23%E5%AE%AE%E8%84%87%E5%92%B2%E8%89%AF">Click to Tweet <small>(for people who want to write their own thing)</small></small></div>
+                    <div class="link-top-primary js-link__toggle" data-link-type="pre">Click to Tweet <small>(for lazy bitches)</small></small></div>
+                    <div class="link-top-primary js-link__toggle" data-link-type="custome">Click to Tweet <small>(for people who want to write their own thing)</small></small></div>
                 </div>
             </div>
         </div>
@@ -227,6 +227,7 @@
 </body>
 <script>
     let GLOBAL_phase = 0;
+    const GLOBAL__contentSuffix = '%0A%0ASAKURA%20Dream%20To%20Tokyo%20Dome%0A%23IntoSAKURADreamWorld%0A%23%E5%AE%AE%E8%84%87%E5%92%B2%E8%89%AF';
 
     function countdown() {
         const timeP1Start = new Date('2025-11-18 17:00:00');
@@ -307,7 +308,7 @@
         fetchTime();
     }
 
-    function generate() {
+    async function generate() {
         const link = document.querySelector('.js-link__toggle');
         const timer = document.querySelector('.js-link__timer');
 
@@ -316,14 +317,29 @@
         let clickCount = 0;
         let longCooldown = false;
 
+        let tweets = [];
+        try {
+            const response = await fetch('tweets.json');
+            tweets = await response.json();
+        } catch (err) {
+            console.error('Failed to load tweets.json:', err);
+        }
+
         timer.textContent = 'Ready!';
 
         link.addEventListener('click', () => {
             if (longCooldown) return;
             clickCount++;
 
-            const src = link.getAttribute('data-link-src');
-            window.open(src);
+            const type = link.getAttribute('data-link-type');
+            let src = '';
+
+            if (type === 'pre' && tweets.length > 0) {
+                const randomIndex = Math.floor(Math.random() * tweets.length);
+                src = tweets[randomIndex];
+            }
+
+            window.open(src + GLOBAL__contentSuffix);
 
             let seconds = Math.floor(Math.random() * (30 - 15 + 1)) + 15;
             link.style.pointerEvents = 'none';
