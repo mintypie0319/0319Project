@@ -32,7 +32,6 @@ let GLOBAL_ISCOUNTDOWNSTARTED = false;
 
 let GLOBAL_CLICKEDTIMES = 0;
 
-// ===== Labels based on language =====
 const GLOBAL_LABELS = LANG === 'zh-cn' ? {
     cooldown: '秒后可再次发推',
     labelPreFetch: '正在获取时间，请稍候…',
@@ -51,7 +50,6 @@ const GLOBAL_LABELS = LANG === 'zh-cn' ? {
     timerPhase2: 'Phase 2 has started! Time left: <strong>{h}h {m}m {s}s</strong>'
 };
 
-// ====== FUNCTIONS ======
 function formatTime(diff) {
     const hours = Math.floor(diff / 1000 / 60 / 60);
     const minutes = Math.floor((diff / 1000 / 60) % 60);
