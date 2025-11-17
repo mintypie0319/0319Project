@@ -245,8 +245,8 @@
 
         if (!link || !timer) return;
 
-        let clickCount = 0;
-        let longCooldown = false;
+        let clickCount = 0; 
+        let longCooldown = false
 
         timer.textContent = 'Ready!';
 
@@ -254,24 +254,12 @@
             e.preventDefault();
             if (longCooldown) return;
             clickCount++;
-
             const src = link.getAttribute('data-link-src');
-            const appUrl = src.replace(/^https?:\/\//, 'twitter://');
-
-            // Try opening X app
-            window.location.href = appUrl;
-
-            // Fallback to browser after short delay
-            setTimeout(() => {
-                window.open(src, '_blank');
-            }, 500);
-
-            // Short cooldown
+            window.open(src, '_blank');
             let seconds = Math.floor(Math.random() * (30 - 15 + 1)) + 15;
             link.style.pointerEvents = 'none';
             link.style.opacity = '0.5';
             timer.textContent = `${seconds} seconds left to tweet (to avoid flagged as spam)`;
-
             const shortCountdown = setInterval(() => {
                 seconds--;
                 if (seconds > 0) {
@@ -283,18 +271,16 @@
                     link.style.opacity = '';
                 }
             }, 1000);
-
-            // Long cooldown after 5 clicks
             if (clickCount >= 5) {
                 longCooldown = true;
-                clickCount = 0;
+                clickCount = 0; 
                 let longSeconds = Math.floor(Math.random() * (10 * 60 - 5 * 60 + 1)) + 5 * 60;
-
+                link.style.pointerEvents = 'none';
+                link.style.opacity = '0.5';
                 const longCountdown = setInterval(() => {
                     longSeconds--;
                     let minutesLeft = Math.ceil(longSeconds / 60);
                     timer.textContent = `Pause, it's time for a break! This will avoid your account from being flagged as a bot! Wait for ${minutesLeft} minute(s) to tweet again`;
-
                     if (longSeconds <= 0) {
                         clearInterval(longCountdown);
                         longCooldown = false;
@@ -306,8 +292,6 @@
             }
         };
     }
-
-
     countdown();
     generate();
 </script>
