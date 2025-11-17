@@ -351,12 +351,16 @@
             console.error('Failed to load tweets.json:', err);
         }
 
-        timer.textContent = 'Ready!';
 
         links.forEach(link => {
             link.addEventListener('click', () => {
                 if (longCooldown) return;
-                if (GLOBAL_phase === 0) return; // Prevent clicking before Phase 1
+                if (GLOBAL_phase === 0) {
+                    timer.textContent = 'Not the fucking time to trend yet!';
+                    return
+                }
+
+                timer.textContent = 'Ready!';
 
                 lastClickTime = Date.now();
                 clickCount++;
