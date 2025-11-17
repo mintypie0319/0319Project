@@ -250,6 +250,11 @@
 
         timer.textContent = 'Ready!';
 
+        // Simple mobile/tablet detection
+        function isMobileOrTablet() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
         link.onclick = function(e) {
             e.preventDefault();
             if (longCooldown) return;
@@ -257,11 +262,14 @@
 
             const src = link.getAttribute('data-link-src');
 
-            // Attempt to open X app first (deep link)
-            const appUrl = src.replace(/^https?:\/\//, 'twitter://');
-            window.location.href = appUrl; // this is NOT blocked
-
-            // No setTimeout for fallback; users can manually use browser if app fails
+            if (isMobileOrTablet()) {
+                // Open X/Twitter app directly on mobile/tablet
+                const appUrl = src.replace(/^https?:\/\//, 'twitter://');
+                window.location.href = appUrl; // treated as user gesture
+            } else {
+                // Desktop: open in new tab
+                window.open(src, '_blank');
+            }
 
             // Short cooldown
             let seconds = Math.floor(Math.random() * (30 - 15 + 1)) + 15;
