@@ -4,13 +4,13 @@ const GLOBAL = {
     contentSuffix: '%0A%0ASAKURA%20Dream%20To%20Tokyo%20Dome%0A%23IntoSAKURADreamWorld%0A%23%E5%AE%AE%E8%84%87%E5%92%B2%E8%89%AF'
 };
 
-const EVENT_TIMES = {
+const GLOBAL_TIMES = {
     phase1Start: new Date('2025-11-18 17:00:00'),
     phase2Start: new Date('2025-11-18 17:15:01'),
     phase2End: new Date('2025-11-19 00:00:00')
 };
 
-const SELECTORS = {
+const GLOBAL_SELECTORS = {
     links: '.js-link__toggle',
     timer: '.js-link__timer',
     timeLabel: '.js-time__label',
@@ -18,7 +18,7 @@ const SELECTORS = {
 };
 
 let timeJST = new Date();
-let tweetLinksInitialized = false;
+let isTweetsInit = false;
 
 // ===== Labels based on language =====
 const LABELS = LANG === 'zh-cn' ? {
@@ -61,26 +61,26 @@ async function fetchTime() {
 }
 
 function updateCountdownDisplay() {
-    const output = document.querySelector(SELECTORS.timeLabel);
-    const links = document.querySelectorAll(SELECTORS.links);
-    const tutorials = document.querySelectorAll(SELECTORS.tutorials);
+    const output = document.querySelector(GLOBAL_SELECTORS.timeLabel);
+    const links = document.querySelectorAll(GLOBAL_SELECTORS.links);
+    const tutorials = document.querySelectorAll(GLOBAL_SELECTORS.tutorials);
     tutorials.forEach(t => t.style.display = 'none');
 
     if (!output) return;
 
-    if (timeJST < EVENT_TIMES.phase1Start) {
-        const { hours, minutes, seconds } = formatTime(EVENT_TIMES.phase1Start - timeJST);
+    if (timeJST < GLOBAL_TIMES.phase1Start) {
+        const { hours, minutes, seconds } = formatTime(GLOBAL_TIMES.phase1Start - timeJST);
         output.innerHTML = LABELS.timeUntilEvent
             .replace('{h}', hours)
             .replace('{m}', minutes)
             .replace('{s}', seconds);
         GLOBAL.phase = 0;
         links.forEach(l => { l.style.pointerEvents = 'none'; l.style.opacity = '0.5'; });
-        const timer = document.querySelector(SELECTORS.timer);
+        const timer = document.querySelector(GLOBAL_SELECTORS.timer);
         if (timer) timer.innerHTML = LABELS.clickWhenPhase1;
 
-    } else if (timeJST >= EVENT_TIMES.phase1Start && timeJST < EVENT_TIMES.phase2Start) {
-        const { hours, minutes, seconds } = formatTime(EVENT_TIMES.phase2Start - timeJST);
+    } else if (timeJST >= GLOBAL_TIMES.phase1Start && timeJST < GLOBAL_TIMES.phase2Start) {
+        const { hours, minutes, seconds } = formatTime(GLOBAL_TIMES.phase2Start - timeJST);
         output.innerHTML = LABELS.phase1Started
             .replace('{h}', hours)
             .replace('{m}', minutes)
@@ -91,13 +91,13 @@ function updateCountdownDisplay() {
             if (t.getAttribute('data-time-tutorial-toggle') === "1") t.style.display = "block";
         });
 
-        if (!tweetLinksInitialized) {
+        if (!isTweetsInit) {
             initTweetLinks();
-            tweetLinksInitialized = true;
+            isTweetsInit = true;
         }
 
-    } else if (timeJST >= EVENT_TIMES.phase2Start) {
-        const { hours, minutes, seconds } = formatTime(EVENT_TIMES.phase2End - timeJST);
+    } else if (timeJST >= GLOBAL_TIMES.phase2Start) {
+        const { hours, minutes, seconds } = formatTime(GLOBAL_TIMES.phase2End - timeJST);
         output.innerHTML = LABELS.phase2Started
             .replace('{h}', hours)
             .replace('{m}', minutes)
@@ -108,17 +108,17 @@ function updateCountdownDisplay() {
             if (t.getAttribute('data-time-tutorial-toggle') === "2") t.style.display = "block";
         });
 
-        if (!tweetLinksInitialized) {
+        if (!isTweetsInit) {
             initTweetLinks();
-            tweetLinksInitialized = true;
+            isTweetsInit = true;
         }
     }
 }
 
 // ===== Tweet Links =====
 async function initTweetLinks() {
-    const links = document.querySelectorAll(SELECTORS.links);
-    const timer = document.querySelector(SELECTORS.timer);
+    const links = document.querySelectorAll(GLOBAL_SELECTORS.links);
+    const timer = document.querySelector(GLOBAL_SELECTORS.timer);
     if (!links.length || !timer) return;
 
     let clickCount = 0;
@@ -206,14 +206,15 @@ async function initTweetLinks() {
 }
 
 // ===== Countdown =====
-function initCountdown() {
+async function initCountdown() {
+    await fetchTime(); 
+
     setInterval(() => {
         timeJST = new Date(timeJST.getTime() + 1000);
         updateCountdownDisplay();
     }, 1000);
 
     setInterval(fetchTime, 300000);
-    fetchTime();
 }
 
 // ===== INIT =====

@@ -52,7 +52,7 @@ main {
 .section-top-instruction__tutorial {
     display: flex;
     flex-direction: column;
-    gap: 20rem;
+    gap: 30rem;
     text-align: center;
 }
 
@@ -141,7 +141,8 @@ main {
 .quote-top-primary {
     border: 3px solid lightgray;
     padding: 30rem 20rem;
-    font-size: 16rem;
+    font-size: 18rem;
+    font-weight: 900;
     font-style: italic;
 }
 
