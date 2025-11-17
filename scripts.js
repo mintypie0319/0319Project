@@ -14,7 +14,8 @@ const GLOBAL_SELECTORS = {
     links: '.js-link',
     label: '.js-label',
     timer: '.js-timer',
-    tutorials: '.js-time__tutorial-block'
+    tutorials: '.js-tutorial',
+    formCheck: '.js-form-check'
 };
 
 let GLOBAL_TIMECURRENT = new Date();
@@ -119,6 +120,9 @@ function getTweet() {
 
 function setDOM() {
     const links = document.querySelectorAll(GLOBAL_SELECTORS.links);
+    const formInput = document.querySelector(GLOBAL_SELECTORS.formCheck + ' input');
+    const formButton = document.querySelector(GLOBAL_SELECTORS.formCheck + ' button');
+
     links.forEach(link => link.addEventListener('click', () => {
         if (GLOBAL_ISCOUNTDOWNSTARTED) return;
 
@@ -133,6 +137,31 @@ function setDOM() {
         GLOBAL_CLICKEDTIMES++;
         setCountdown();
     }));
+    
+    links.forEach(link => link.addEventListener('click', () => {
+        if (GLOBAL_ISCOUNTDOWNSTARTED) return;
+
+        const type = link.getAttribute('data-link-type');
+        let content = '';
+        if (type === 'pre' && GLOBAL_TWEETS.length) {
+            content = getTweet();
+            GLOBAL_TWEETSUSED.push(content);
+        }
+
+        window.open(GLOBAL.contentPrefix + content + GLOBAL.contentSuffix);
+        GLOBAL_CLICKEDTIMES++;
+        setCountdown();
+    }));
+
+    formButton.addEventListener('click', function (e) {
+        const username = formInput.value.trim();
+        if (!username) {
+            e.preventDefault();
+            alert('Please enter a username first.');
+            return;
+        }
+        window.open('https://shadowban.yuzurisa.com/' + encodeURIComponent(username), '_blank');
+    });
 }
 
 function setCountdown() {
@@ -148,7 +177,7 @@ function setCountdown() {
     } else {
         duration = Math.floor(Math.random() * 11) + 10;
     }
-    
+
     setLabel(`${duration} ${GLOBAL_LABELS.cooldown}`);
     disableLinks();
 

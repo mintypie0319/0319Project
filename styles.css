@@ -139,6 +139,7 @@ main {
 }
 
 .quote-top-primary {
+    margin-top: 20rem;
     border: 3px solid lightgray;
     padding: 30rem 20rem;
     font-size: 18rem;
@@ -152,6 +153,64 @@ main {
     justify-content: center;
     align-items: center;
     gap: 10rem;
+}
+
+.form-top-check {
+    margin-top: 20rem;
+    border: 3px solid lightgray;
+    padding: 30rem 20rem;
+    display: flex;
+    gap: 10rem;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.form-top-check input {
+    width: 250rem;
+    padding: 0 15rem;
+    border: 1px solid lightgray;
+    height: 40rem;
+}
+
+.form-top-check button {
+    min-height: 40rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    padding: 5rem 15rem;
+    background-color: red;
+    color: white;
+    font-weight: 700;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.form-top-check__tutorial {
+    width: 100%;
+    margin-top: 10rem;
+    padding: 20rem;
+    border: 1px solid lightgray;
+    background-color: #efefef;
+}
+
+.form-top-check__tutorial img {
+    width: 100%;
+    height: auto;
+    margin: 15rem 0;
+    border: 1px solid lightgray;
+    background-color: white;
+    padding: 5rem;
+}
+
+.form-top-check__tutorial img:last-child {
+    margin-bottom: 0;
+}
+
+.form-top-check__tutorial p {
+    margin: 0;
 }
 
 @media (min-width: 1080px) {
