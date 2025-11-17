@@ -62,6 +62,7 @@
             display: none;
             font-size: 16rem;
             text-align: center;
+            white-space: pre-wrap;
         }
 
         .section-top-generate {
@@ -162,16 +163,16 @@
                     <div class="section-top-instruction__time js-time__label"></div>
                     <div class="section-top-instruction__tutorial">
                         <div class="section-top-instruction__tutorial-block js-time__tutorial" data-time-tutorial-toggle="1">
-Phase 1's rules:
+                            Phase 1's rules:
 
-✖ No GIFs
-✖ No Images
-✖ No Emojis
+                            ✖ No GIFs
+                            ✖ No Images
+                            ✖ No Emojis
                         </div>
                         <div class="section-top-instruction__tutorial-block js-time__tutorial" data-time-tutorial-toggle="2">
-Phase 2's rules:
+                            Phase 2's rules:
 
-✖ No Emojis
+                            ✖ No Emojis
                         </div>
                     </div>
                     <div class="section-top-instruction__progress-bar">
@@ -223,6 +224,9 @@ Phase 2's rules:
             const output = document.querySelector('.js-time .js-time__label');
             if (!output) return;
 
+            const tutorials = document.querySelectorAll('.js-time__tutorial .js-time__tutorial-block');
+            tutorials.forEach(t => t.style.display = 'none'); // Hide all tutorials
+
             if (timeJST < timeP1Start) {
                 const {
                     hours,
@@ -231,10 +235,7 @@ Phase 2's rules:
                 } = formatTime(timeP1Start - timeJST);
                 output.textContent = `Time until the event starts: ${hours}h ${minutes}m ${seconds}s`;
                 GLOBAL_phase = 0;
-                return;
-            }
-
-            if (timeJST >= timeP1Start && timeJST < timeP2Start) {
+            } else if (timeJST >= timeP1Start && timeJST < timeP2Start) {
                 const {
                     hours,
                     minutes,
@@ -242,10 +243,11 @@ Phase 2's rules:
                 } = formatTime(timeP2Start - timeJST);
                 output.textContent = `Phase 1 has started! Time left: ${hours}h ${minutes}m ${seconds}s`;
                 GLOBAL_phase = 1;
-                return;
-            }
 
-            if (timeJST >= timeP2Start) {
+                tutorials.forEach(t => {
+                    if (t.dataset.timeTutorialToggle === "1") t.style.display = "block";
+                });
+            } else if (timeJST >= timeP2Start) {
                 const {
                     hours,
                     minutes,
@@ -253,6 +255,10 @@ Phase 2's rules:
                 } = formatTime(timeP2End - timeJST);
                 output.textContent = `Phase 2 has started! Time left: ${hours}h ${minutes}m ${seconds}s`;
                 GLOBAL_phase = 2;
+
+                tutorials.forEach(t => {
+                    if (t.dataset.timeTutorialToggle === "2") t.style.display = "block";
+                });
             }
         }
 
@@ -281,7 +287,6 @@ Phase 2's rules:
             clickCount++;
 
             const src = link.getAttribute('data-link-src');
-
             window.open(src);
 
             let seconds = Math.floor(Math.random() * (30 - 15 + 1)) + 15;
