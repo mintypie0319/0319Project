@@ -341,10 +341,10 @@
 
                 if (type === 'pre' && tweets.length > 0) {
                     const availableTweets = tweets.filter(t => !usedTweets.includes(t));
-
-                    const randomIndex = Math.floor(Math.random() * availableTweets.length);
-                    src = availableTweets[randomIndex];
-
+                    if (availableTweets.length === 0) usedTweets = []; // reset if all used
+                    const newAvailable = tweets.filter(t => !usedTweets.includes(t));
+                    const randomIndex = Math.floor(Math.random() * newAvailable.length);
+                    src = newAvailable[randomIndex];
                     usedTweets.push(src);
                 } else {
                     src = link.getAttribute('data-link-src') || '';
@@ -373,30 +373,31 @@
                     }
                 }, 1000);
 
+                // Reset usedTweets after 5 clicks (tweet reuse logic)
                 if (clickCount >= 5) {
                     clickCount = 0;
                     usedTweets = [];
-
-                    longCooldown = true;
-                    let longSeconds = Math.floor(Math.random() * (10 * 60 - 5 * 60 + 1)) + 5 * 60;
-                    const longCountdown = setInterval(() => {
-                        longSeconds--;
-                        let minutesLeft = Math.ceil(longSeconds / 60);
-                        timer.textContent = `Pause, it's time for a break! Wait for ${minutesLeft} minute(s) to tweet again`;
-
-                        if (longSeconds <= 0) {
-                            clearInterval(longCountdown);
-                            longCooldown = false;
-                            timer.textContent = 'Ready!';
-                            links.forEach(l => {
-                                l.style.pointerEvents = '';
-                                l.style.opacity = '';
-                            });
-                        }
-                    }, 1000);
                 }
             });
         });
+
+        setInterval(() => {
+            if (longCooldown) return;
+            longCooldown = true;
+            let longSeconds = Math.floor(Math.random() * (15 * 60 - 10 * 60 + 1)) + 10 * 60;
+
+            const longCountdown = setInterval(() => {
+                longSeconds--;
+                let minutesLeft = Math.ceil(longSeconds / 60);
+                timer.textContent = `Pause, it's time for a break! Wait for ${minutesLeft} minute(s) to tweet again`;
+
+                if (longSeconds <= 0) {
+                    clearInterval(longCountdown);
+                    longCooldown = false;
+                    timer.textContent = 'Ready!';
+                }
+            }, 1000);
+        }, 60 * 1000);
     }
 
     countdown();
