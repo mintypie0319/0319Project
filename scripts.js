@@ -36,7 +36,7 @@ let GLOBAL_CLICKEDTIMES = 0;
 const GLOBAL_LABELS = LANG === 'zh-cn' ? {
     cooldown: '秒后可再次发推',
     labelPreFetch: '正在获取时间，请稍候…',
-    labelPre: '阶段 1 开始时点击发推',
+    labelPre: '仅在阶段 1 开始时可用，请稍候…',
     labelActive: '再次点击发推',
     timerPre: '距离活动开始时间：<strong>{h}小时 {m}分钟 {s}秒</strong>',
     timerPhase1: '阶段 1 已开始！剩余时间：<strong>{h}小时 {m}分钟 {s}秒</strong>',
@@ -44,7 +44,7 @@ const GLOBAL_LABELS = LANG === 'zh-cn' ? {
 } : {
     cooldown: 'seconds left to tweet',
     labelPreFetch: 'Fetching time, please wait…',
-    labelPre: 'Click to tweet when Phase 1 starts',
+    labelPre: 'Only available when Phase 1 starts, so please wait...',
     labelActive: 'Click to tweet again',
     timerPre: 'Time until the event starts: <strong>{h}h {m}m {s}s</strong>',
     timerPhase1: 'Phase 1 has started! Time left: <strong>{h}h {m}m {s}s</strong>',
@@ -220,8 +220,9 @@ async function calculateDuration() {
 }
 
 async function init() {
-    setLabel(GLOBAL_LABELS.labelPreFetch);
     disableLinks();
+    displayTutorial('0');
+    setLabel(GLOBAL_LABELS.labelPreFetch);
 
     await Promise.all([fetchTime(), fetchTweet()]);
 
