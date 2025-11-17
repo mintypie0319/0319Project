@@ -1,9 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Cantata+One&family=Noto+Serif+JP:wght@200..900&family=ZCOOL+XiaoWei&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&family=Noto+Sans+SC:wght@100..900&display=swap');
 
 body {
     font-size: 16rem;
     line-height: calc(24 / 16);
-    font-family: "Cantata One", "Noto Serif JP", "ZCOOL XiaoWei", sans-serif;
+    font-family: "Noto Sans JP", "Noto Sans SC", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: <weight>;
     font-style: normal;
 }
 
