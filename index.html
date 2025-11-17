@@ -109,8 +109,6 @@
         }
 
         .link-top-primary {
-            max-width: 180rem;
-            margin: 30rem auto 0;
             display: block;
             padding: 10rem 20rem;
             background-color: red;
@@ -121,12 +119,26 @@
             cursor: pointer;
         }
 
+        .link-top-primary small {
+            display: block;
+            margin-top: 5rem;
+            font-size: 12rem;
+        }
+
         .quote-top-primary {
             margin-top: 20rem;
             border: 3px solid lightgray;
             padding: 30rem 20rem;
             font-size: 16rem;
             font-style: italic;
+        }
+
+        .controller-top-primary {
+            margin-top: 30rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
         }
 
         @media (min-width: 1080px) {
@@ -188,6 +200,7 @@
                         </div>
                         <div class="section-top-instruction__tutorial-block js-time__tutorial" data-time-tutorial-toggle="1">
                             Phase 1's rules:<br><br>
+                            ⭕ Must contain at least 15 words for each tweet<br>
                             ❌ No GIFs<br>
                             ❌ No Images<br>
                             ❌ No Emojis
@@ -203,7 +216,10 @@
         <div class="section-top-generate">
             <div class="wrapper">
                 <div class="timer-top-primary js-link__timer">Ready!</div>
-                <div class="link-top-primary js-link__toggle" data-link-src="https://x.com/intent/tweet?text=%0A%0ASAKURA%20Dream%20To%20Tokyo%20Dome%0A%23IntoSAKURADreamWorld%0A%23%E5%AE%AE%E8%84%87%E5%92%B2%E8%89%AF">Click to Tweet!</div>
+                <div class="controller-top-primary">
+                    <div class="link-top-primary js-link__toggle" data-link-src="https://x.com/intent/tweet?text=%0A%0ASAKURA%20Dream%20To%20Tokyo%20Dome%0A%23IntoSAKURADreamWorld%0A%23%E5%AE%AE%E8%84%87%E5%92%B2%E8%89%AF">Click to Tweet <small>(for lazy bitches)</small></small></div>
+                    <div class="link-top-primary js-link__toggle" data-link-src="https://x.com/intent/tweet?text=%0A%0ASAKURA%20Dream%20To%20Tokyo%20Dome%0A%23IntoSAKURADreamWorld%0A%23%E5%AE%AE%E8%84%87%E5%92%B2%E8%89%AF">Click to Tweet <small>(for people who want to write their own thing)</small></small></div>
+                </div>
             </div>
         </div>
     </main>
