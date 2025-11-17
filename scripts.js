@@ -20,7 +20,6 @@ const GLOBAL_SELECTORS = {
 let GLOBAL_TIMECURRENT = new Date();
 let GLOBAL_TWEETS = [];
 let GLOBAL_TWEETSUSED = [];
-let GLOBAL_ISEVENTSTARTED = false;
 let GLOBAL_ISTIMEFETCHED = false;
 let GLOBAL_ISTWEETFETCHED = false;
 
@@ -179,42 +178,21 @@ function updateDOM() {
         const { hours, minutes, seconds } = formatTime(GLOBAL_TIMES.phase2Start - GLOBAL_TIMECURRENT);
         GLOBAL.phase = 1;
         setTimer(GLOBAL_LABELS.timerPhase1.replace('{h}', hours).replace('{m}', minutes).replace('{s}', seconds));
-        if (!GLOBAL_ISCOUNTDOWNSTARTED) enableLinks();
-        displayTutorial('1');
-        if (!GLOBAL_ISEVENTSTARTED) {
-            GLOBAL_ISEVENTSTARTED = true;
-            calculateDuration();
+        if (!GLOBAL_ISCOUNTDOWNSTARTED) {
+            setLabel(GLOBAL_LABELS.labelActive);
+            enableLinks();
         }
+        displayTutorial('1');
     } else if (GLOBAL_TIMECURRENT >= GLOBAL_TIMES.phase2Start) {
         const { hours, minutes, seconds } = formatTime(GLOBAL_TIMES.phase2End - GLOBAL_TIMECURRENT);
         GLOBAL.phase = 2;
         setTimer(GLOBAL_LABELS.timerPhase2.replace('{h}', hours).replace('{m}', minutes).replace('{s}', seconds));
-        if (!GLOBAL_ISCOUNTDOWNSTARTED) enableLinks();
-        displayTutorial('2');
-        if (!GLOBAL_ISEVENTSTARTED) {
-            GLOBAL_ISEVENTSTARTED = true;
-            calculateDuration();
+        if (!GLOBAL_ISCOUNTDOWNSTARTED) {
+            setLabel(GLOBAL_LABELS.labelActive);
+            enableLinks();
         }
+        displayTutorial('2');
     }
-}
-
-async function calculateDuration() {
-    if (!GLOBAL_ISTWEETFETCHED || !GLOBAL_ISTIMEFETCHED) {
-        await Promise.all([
-            new Promise(resolve => {
-                const check = setInterval(() => {
-                    if (GLOBAL_ISTWEETFETCHED && GLOBAL_ISTIMEFETCHED) {
-                        clearInterval(check);
-                        resolve();
-                    }
-                }, 50);
-            })
-        ]);
-    }
-
-    if (!GLOBAL_ISEVENTSTARTED) return;
-
-    setLabel(GLOBAL_LABELS.labelActive);
 }
 
 async function init() {
