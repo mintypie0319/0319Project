@@ -49,6 +49,8 @@
         }
 
         .section-top-instruction__time {
+            padding-bottom: 30rem;
+            border-bottom: 10rem solid lightgray;
             margin-bottom: 30rem;
             text-align: center;
             font-weight: 700;
@@ -194,9 +196,6 @@
             <div class="wrapper">
                 <div class="section-top-instruction__progress js-time">
                     <div class="section-top-instruction__time js-time__label"></div>
-                    <div class="section-top-instruction__progress-bar">
-                        <div class="section-top-instruction__bar-track"></div>
-                    </div>
                     <div class="section-top-instruction__tutorial">
                         <div class="section-top-instruction__tutorial-block js-time__tutorial" style="display: block">
                             Common rules:<br><br>
@@ -227,120 +226,133 @@
     </main>
 </body>
 <script>
-    let GLOBAL_phase = 0;
-    const GLOBAL__contentPrefix = 'https://x.com/intent/tweet?text=';
-    const GLOBAL__contentSuffix = '%0A%0ASAKURA%20Dream%20To%20Tokyo%20Dome%0A%23IntoSAKURADreamWorld%0A%23%E5%AE%AE%E8%84%87%E5%92%B2%E8%89%AF';
+    const GLOBAL = {
+        phase: 0,
+        contentPrefix: 'https://x.com/intent/tweet?text=',
+        contentSuffix: '%0A%0ASAKURA%20Dream%20To%20Tokyo%20Dome%0A%23IntoSAKURADreamWorld%0A%23%E5%AE%AE%E8%84%87%E5%92%B2%E8%89%AF'
+    };
 
-    function countdown() {
-        const timeP1Start = new Date('2025-11-18 17:00:00');
-        const timeP2Start = new Date('2025-11-18 17:15:01');
-        const timeP2End = new Date('2025-11-19 00:00:00');
-        let timeJST = new Date();
+    const EVENT_TIMES = {
+        phase1Start: new Date('2025-11-18 17:00:00'),
+        phase2Start: new Date('2025-11-18 17:15:01'),
+        phase2End: new Date('2025-11-19 00:00:00')
+    };
 
-        const links = document.querySelectorAll('.js-link__toggle');
+    const SELECTORS = {
+        links: '.js-link__toggle',
+        timer: '.js-link__timer',
+        timeLabel: '.js-time .js-time__label',
+        tutorials: '.js-time__tutorial .js-time__tutorial-block'
+    };
 
-        async function fetchTime() {
-            try {
-                const response = await fetch('https://timeapi.io/api/time/current/zone?timeZone=Asia/Tokyo');
-                const data = await response.json();
-                timeJST = new Date(data.dateTime);
-                updateDisplay();
-            } catch (error) {
-                console.error('Error fetching time:', error);
-            }
+    let timeJST = new Date();
+    let tweetLinksInitialized = false;
+
+    function formatTime(diff) {
+        const hours = Math.floor(diff / 1000 / 60 / 60);
+        const minutes = Math.floor((diff / 1000 / 60) % 60);
+        const seconds = Math.floor((diff / 1000) % 60);
+        return {
+            hours,
+            minutes,
+            seconds
+        };
+    }
+
+    async function fetchTime() {
+        try {
+            const response = await fetch('https://timeapi.io/api/time/current/zone?timeZone=Asia/Tokyo');
+            const data = await response.json();
+            timeJST = new Date(data.dateTime);
+            updateCountdownDisplay();
+        } catch (error) {
+            console.error('Error fetching time:', error);
         }
+    }
 
-        function formatTime(diff) {
-            const hours = Math.floor(diff / 1000 / 60 / 60);
-            const minutes = Math.floor((diff / 1000 / 60) % 60);
-            const seconds = Math.floor((diff / 1000) % 60);
-            return {
+    function updateCountdownDisplay() {
+        const output = document.querySelector(SELECTORS.timeLabel);
+        const links = document.querySelectorAll(SELECTORS.links);
+        const tutorials = document.querySelectorAll(SELECTORS.tutorials);
+        tutorials.forEach(t => t.style.display = 'none');
+
+        if (!output) return;
+
+        if (timeJST < EVENT_TIMES.phase1Start) {
+            const {
                 hours,
                 minutes,
                 seconds
-            };
-        }
+            } = formatTime(EVENT_TIMES.phase1Start - timeJST);
+            output.textContent = `Time until the event starts: ${hours}h ${minutes}m ${seconds}s`;
+            GLOBAL.phase = 0;
+            links.forEach(l => {
+                l.style.pointerEvents = 'none';
+                l.style.opacity = '0.5';
+            });
+            const timer = document.querySelector(SELECTORS.timer);
+            if (timer) timer.textContent = 'Click to tweet when Phase 1 starts';
+        } else if (timeJST >= EVENT_TIMES.phase1Start && timeJST < EVENT_TIMES.phase2Start) {
+            const {
+                hours,
+                minutes,
+                seconds
+            } = formatTime(EVENT_TIMES.phase2Start - timeJST);
+            output.textContent = `Phase 1 has started! Time left: ${hours}h ${minutes}m ${seconds}s`;
+            GLOBAL.phase = 1;
+            links.forEach(l => {
+                l.style.pointerEvents = '';
+                l.style.opacity = '';
+            });
+            tutorials.forEach(t => {
+                if (t.dataset.timeTutorialToggle === "1") t.style.display = "block";
+            });
 
-        function updateDisplay() {
-            const output = document.querySelector('.js-time .js-time__label');
-            if (!output) return;
+            if (!tweetLinksInitialized) {
+                initTweetLinks();
+                tweetLinksInitialized = true;
+            }
+        } else if (timeJST >= EVENT_TIMES.phase2Start) {
+            const {
+                hours,
+                minutes,
+                seconds
+            } = formatTime(EVENT_TIMES.phase2End - timeJST);
+            output.textContent = `Phase 2 has started! Time left: ${hours}h ${minutes}m ${seconds}s`;
+            GLOBAL.phase = 2;
+            links.forEach(l => {
+                l.style.pointerEvents = '';
+                l.style.opacity = '';
+            });
+            tutorials.forEach(t => {
+                if (t.dataset.timeTutorialToggle === "2") t.style.display = "block";
+            });
 
-            const tutorials = document.querySelectorAll('.js-time__tutorial .js-time__tutorial-block');
-            tutorials.forEach(t => t.style.display = 'none'); // Hide all tutorials
-
-            if (timeJST < timeP1Start) {
-                const {
-                    hours,
-                    minutes,
-                    seconds
-                } = formatTime(timeP1Start - timeJST);
-                output.textContent = `Time until the event starts: ${hours}h ${minutes}m ${seconds}s`;
-                GLOBAL_phase = 0;
-
-                // Disable links before Phase 1
-                links.forEach(l => {
-                    l.style.pointerEvents = 'none';
-                    l.style.opacity = '0.5';
-                });
-
-            } else if (timeJST >= timeP1Start && timeJST < timeP2Start) {
-                const {
-                    hours,
-                    minutes,
-                    seconds
-                } = formatTime(timeP2Start - timeJST);
-                output.textContent = `Phase 1 has started! Time left: ${hours}h ${minutes}m ${seconds}s`;
-                GLOBAL_phase = 1;
-
-                // Enable links for Phase 1
-                links.forEach(l => {
-                    l.style.pointerEvents = '';
-                    l.style.opacity = '';
-                });
-
-                tutorials.forEach(t => {
-                    if (t.dataset.timeTutorialToggle === "1") t.style.display = "block";
-                });
-            } else if (timeJST >= timeP2Start) {
-                const {
-                    hours,
-                    minutes,
-                    seconds
-                } = formatTime(timeP2End - timeJST);
-                output.textContent = `Phase 2 has started! Time left: ${hours}h ${minutes}m ${seconds}s`;
-                GLOBAL_phase = 2;
-
-                // Ensure links are enabled
-                links.forEach(l => {
-                    l.style.pointerEvents = '';
-                    l.style.opacity = '';
-                });
-
-                tutorials.forEach(t => {
-                    if (t.dataset.timeTutorialToggle === "2") t.style.display = "block";
-                });
+            if (!tweetLinksInitialized) {
+                initTweetLinks();
+                tweetLinksInitialized = true;
             }
         }
+    }
 
+    function initCountdown() {
         setInterval(() => {
             timeJST = new Date(timeJST.getTime() + 1000);
-            updateDisplay();
+            updateCountdownDisplay();
         }, 1000);
 
         setInterval(fetchTime, 300000);
         fetchTime();
     }
 
-    async function generate() {
-        const links = document.querySelectorAll('.js-link__toggle');
-        const timer = document.querySelector('.js-link__timer');
-
+    async function initTweetLinks() {
+        const links = document.querySelectorAll(SELECTORS.links);
+        const timer = document.querySelector(SELECTORS.timer);
         if (!links.length || !timer) return;
 
         let clickCount = 0;
         let longCooldown = false;
         let lastClickTime = Date.now();
-
         let tweets = [];
         let usedTweets = [];
 
@@ -351,96 +363,85 @@
             console.error('Failed to load tweets.json:', err);
         }
 
+        function openTweet(link) {
+            if (longCooldown) return;
 
-        links.forEach(link => {
-            link.addEventListener('click', () => {
-                if (longCooldown) return;
-                if (GLOBAL_phase === 0) {
-                    timer.textContent = 'Not the fucking time to trend yet!';
-                    return
-                }
+            lastClickTime = Date.now();
+            clickCount++;
 
-                timer.textContent = 'Ready!';
+            const type = link.getAttribute('data-link-type');
+            let src = '';
+            if (type === 'pre' && tweets.length) {
+                let available = tweets.filter(t => !usedTweets.includes(t));
+                if (!available.length) usedTweets = [];
+                available = tweets.filter(t => !usedTweets.includes(t));
+                src = available[Math.floor(Math.random() * available.length)];
+                usedTweets.push(src);
+            } else {
+                src = link.getAttribute('data-link-src') || '';
+            }
 
-                lastClickTime = Date.now();
-                clickCount++;
+            window.open(GLOBAL.contentPrefix + src + GLOBAL.contentSuffix);
+            startShortCooldown(timer, links);
 
-                const type = link.getAttribute('data-link-type');
-                let src = '';
+            if (clickCount >= 5) {
+                clickCount = 0;
+                usedTweets = [];
+            }
+        }
 
-                if (type === 'pre' && tweets.length > 0) {
-                    const availableTweets = tweets.filter(t => !usedTweets.includes(t));
-                    if (availableTweets.length === 0) usedTweets = [];
-                    const newAvailable = tweets.filter(t => !usedTweets.includes(t));
-
-                    const randomIndex = Math.floor(Math.random() * newAvailable.length);
-                    src = newAvailable[randomIndex];
-                    usedTweets.push(src);
-                } else {
-                    src = link.getAttribute('data-link-src') || '';
-                }
-
-                window.open(GLOBAL__contentPrefix + src + GLOBAL__contentSuffix);
-
-                let seconds = Math.floor(Math.random() * (20 - 10 + 1)) + 10;
-                links.forEach(l => {
-                    l.style.pointerEvents = 'none';
-                    l.style.opacity = '0.5';
-                });
-                timer.textContent = `${seconds} seconds left to tweet (to avoid being flagged as spam)`;
-
-                const shortCountdown = setInterval(() => {
-                    seconds--;
-                    if (seconds > 0) {
-                        timer.textContent = `${seconds} seconds left to tweet (to avoid being flagged as spam)`;
-                    } else {
-                        clearInterval(shortCountdown);
-                        timer.textContent = 'Ready!';
-                        links.forEach(l => {
-                            l.style.pointerEvents = '';
-                            l.style.opacity = '';
-                        });
-                    }
-                }, 1000);
-
-                if (clickCount >= 5) {
-                    clickCount = 0;
-                    usedTweets = [];
-                }
+        function startShortCooldown(timer, links) {
+            let seconds = Math.floor(Math.random() * 11) + 10;
+            links.forEach(l => {
+                l.style.pointerEvents = 'none';
+                l.style.opacity = '0.5';
             });
-        });
+            timer.textContent = `${seconds} seconds left to tweet`;
+
+            const interval = setInterval(() => {
+                seconds--;
+                if (seconds > 0) {
+                    timer.textContent = `${seconds} seconds left to tweet`;
+                } else {
+                    clearInterval(interval);
+                    timer.textContent = 'Click to tweet again';
+                    links.forEach(l => {
+                        l.style.pointerEvents = '';
+                        l.style.opacity = '';
+                    });
+                }
+            }, 1000);
+        }
+
+        links.forEach(link => link.addEventListener('click', () => openTweet(link)));
 
         setInterval(() => {
-            if (longCooldown) return;
+            if (longCooldown || GLOBAL.phase === 0) return;
 
             const now = Date.now();
             const inactivityMinutes = (now - lastClickTime) / 1000 / 60;
-
-            let longSeconds = Math.floor(Math.random() * (7 * 60 - 2 * 60 + 1)) + 2 * 60;
+            let longSeconds = Math.floor(Math.random() * (300)) + 120;
             longSeconds -= inactivityMinutes * 60;
             if (longSeconds < 0) longSeconds = 0;
 
             longCooldown = true;
 
-            const longCountdown = setInterval(() => {
+            const interval = setInterval(() => {
                 longSeconds--;
-
-                let minutesLeft = Math.ceil(longSeconds / 60);
-                timer.textContent = `Pause, it's time for a break! Wait for ${minutesLeft} minute(s) to tweet again`;
+                const minutesLeft = Math.ceil(longSeconds / 60);
+                timer.textContent = `Pause, wait for ${minutesLeft} minute(s)`;
 
                 if (longSeconds <= 0) {
-                    clearInterval(longCountdown);
+                    clearInterval(interval);
                     longCooldown = false;
-                    timer.textContent = 'Ready!';
+                    timer.textContent = 'Click to tweet again';
                     lastClickTime = Date.now();
                 }
             }, 1000);
-
-        }, 60 * 1000);
+        }, 60000);
     }
 
-    countdown();
-    generate();
+    initCountdown();
 </script>
 
 </html>
