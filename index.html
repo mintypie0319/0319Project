@@ -310,10 +310,10 @@
     }
 
     async function generate() {
-        const link = document.querySelector('.js-link__toggle');
+        const links = document.querySelectorAll('.js-link__toggle');
         const timer = document.querySelector('.js-link__timer');
 
-        if (!link || !timer) return;
+        if (!links.length || !timer) return;
 
         let clickCount = 0;
         let longCooldown = false;
@@ -328,56 +328,65 @@
 
         timer.textContent = 'Ready!';
 
-        link.addEventListener('click', () => {
-            if (longCooldown) return;
-            clickCount++;
+        links.forEach(link => {
+            link.addEventListener('click', () => {
+                if (longCooldown) return;
+                clickCount++;
 
-            const type = link.getAttribute('data-link-type');
-            let src = '';
+                const type = link.getAttribute('data-link-type');
+                let src = '';
 
-            if (type === 'pre' && tweets.length > 0) {
-                const randomIndex = Math.floor(Math.random() * tweets.length);
-                src = tweets[randomIndex];
-            }
-
-            window.open(GLOBAL__contentPrefix + src + GLOBAL__contentSuffix);
-
-            let seconds = Math.floor(Math.random() * (30 - 15 + 1)) + 15;
-            link.style.pointerEvents = 'none';
-            link.style.opacity = '0.5';
-            timer.textContent = `${seconds} seconds left to tweet (to avoid flagged as spam)`;
-
-            const shortCountdown = setInterval(() => {
-                seconds--;
-                if (seconds > 0) {
-                    timer.textContent = `${seconds} seconds left to tweet (to avoid flagged as spam)`;
-                } else {
-                    clearInterval(shortCountdown);
-                    timer.textContent = 'Ready!';
-                    link.style.pointerEvents = '';
-                    link.style.opacity = '';
+                if (type === 'pre' && tweets.length > 0) {
+                    const randomIndex = Math.floor(Math.random() * tweets.length);
+                    src = tweets[randomIndex];
                 }
-            }, 1000);
 
-            if (clickCount >= 5) {
-                longCooldown = true;
-                clickCount = 0;
-                let longSeconds = Math.floor(Math.random() * (10 * 60 - 5 * 60 + 1)) + 5 * 60;
+                window.open(GLOBAL__contentPrefix + src + GLOBAL__contentSuffix);
 
-                const longCountdown = setInterval(() => {
-                    longSeconds--;
-                    let minutesLeft = Math.ceil(longSeconds / 60);
-                    timer.textContent = `Pause, it's time for a break! Wait for ${minutesLeft} minute(s) to tweet again`;
+                let seconds = Math.floor(Math.random() * (30 - 15 + 1)) + 15;
 
-                    if (longSeconds <= 0) {
-                        clearInterval(longCountdown);
-                        longCooldown = false;
+                links.forEach(l => {
+                    l.style.pointerEvents = 'none';
+                    l.style.opacity = '0.5';
+                });
+                timer.textContent = `${seconds} seconds left to tweet (to avoid being flagged as spam)`;
+
+                const shortCountdown = setInterval(() => {
+                    seconds--;
+                    if (seconds > 0) {
+                        timer.textContent = `${seconds} seconds left to tweet (to avoid being flagged as spam)`;
+                    } else {
+                        clearInterval(shortCountdown);
                         timer.textContent = 'Ready!';
-                        link.style.pointerEvents = '';
-                        link.style.opacity = '';
+                        links.forEach(l => {
+                            l.style.pointerEvents = '';
+                            l.style.opacity = '';
+                        });
                     }
                 }, 1000);
-            }
+
+                if (clickCount >= 5) {
+                    longCooldown = true;
+                    clickCount = 0;
+                    let longSeconds = Math.floor(Math.random() * (10 * 60 - 5 * 60 + 1)) + 5 * 60;
+
+                    const longCountdown = setInterval(() => {
+                        longSeconds--;
+                        let minutesLeft = Math.ceil(longSeconds / 60);
+                        timer.textContent = `Pause, it's time for a break! Wait for ${minutesLeft} minute(s) to tweet again`;
+
+                        if (longSeconds <= 0) {
+                            clearInterval(longCountdown);
+                            longCooldown = false;
+                            timer.textContent = 'Ready!';
+                            links.forEach(l => {
+                                l.style.pointerEvents = '';
+                                l.style.opacity = '';
+                            });
+                        }
+                    }, 1000);
+                }
+            });
         });
     }
 
