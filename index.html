@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-size: 20rem;
+            line-height: calc(30 / 20);
+            font-family: "Roboto", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: <weight>;
+            font-style: normal;
+            font-variation-settings:
+                "wdth" 100;
+        }
+
+        .wrapper {
+            max-width: 960rem;
+            width: calc(100% - 40rem);
+            margin: 0 auto;
+        }
+
+        .section-top {
+            padding: 100rem 0 50rem;
+        }
+
+        .section-top-instruction__progress-bar {
+            height: 10rem;
+            background-color: lightgray;
+        }
+
+        .section-top-instruction__bar-track {
+            width: 0%;
+            height: 100%;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .section-top-instruction__time {
+            margin-bottom: 30rem;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .section-top-instruction {
+            padding: 0 0 50rem;
+        }
+
+        .section-top-generate {
+            padding: 0 0 100rem;
+        }
+
+        .title-top-primary {
+            margin: 0;
+            padding: 0;
+            font-size: 40rem;
+            font-weight: 900;
+            text-align: center;
+        }
+
+        .title-top-primary strong {
+            color: red;
+        }
+
+
+        .iframe-top-x {
+            padding-top: calc(1080 / 1920 * 100%);
+            position: relative;
+        }
+
+        .iframe-top-x iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }
+
+        .timer-top-primary {
+            display: block;
+            font-size: 18rem;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .link-top-primary {
+            max-width: 180rem;
+            margin: 30rem auto 0;
+            display: block;
+            padding: 10rem 20rem;
+            background-color: red;
+            color: white;
+            font-size: 20rem;
+            font-weight: 700;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        @media (min-width: 1080px) {
+            html {
+                font-size: 6.25%;
+            }
+        }
+
+        @media (min-width: 768px) and (max-width: 1079.98px) {
+            html {
+                font-size: calc(100vw / 1080);
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            html {
+                font-size: calc(100vw / 375);
+            }
+
+            body {
+                font-size: 16rem;
+            }
+
+            .title-top-primary {
+                font-size: 20rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <div class="section-top">
+            <div class="wrapper">
+                <h1 class="title-top-primary">
+                    SAKURA Dream To Tokyo Dome<br>
+                    #IntoSAKURADreamWorld<br>
+                    <strong>#宮脇咲良</strong>
+                </h1>
+            </div>
+        </div>
+        <div class="section-top-instruction">
+            <div class="wrapper">
+                <div class="section-top-instruction__progress js-time">
+                    <div class="section-top-instruction__time js-time__label"></div>
+                    <div class="section-top-instruction__progress-bar">
+                        <div class="section-top-instruction__bar-track"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="section-top-generate">
+            <div class="wrapper">
+                <div class="timer-top-primary js-link__timer">Ready!</div>
+                <div class="link-top-primary js-link__toggle" data-link-src="https://x.com/intent/post?text=SAKURA%20Dream%20To%20Tokyo%20Dome%0A%23IntoSAKURADreamWorld%0A%23%E5%AE%AE%E8%84%87%E5%92%B2%E8%89%AF">Click to Tweet!</div>
+            </div>
+        </div>
+    </main>
+</body>
+<script>
+    const GLOBAL_phase = 0;
+
+    function countdown() {
+        const timeP1Start = new Date('2025-11-18 17:00:00');
+        const timeP2Start = new Date('2025-11-18 17:15:01');
+        const timeP2End = new Date('2025-11-19 00:00:00');
+        let timeJST = new Date();
+        async function fetchTime() {
+            try {
+                const response = await fetch('https://timeapi.io/api/time/current/zone?timeZone=Asia/Tokyo');
+                const data = await response.json();
+                timeJST = new Date(data.dateTime);
+                updateDisplay();
+            } catch (error) {
+                console.error('Error fetching time:', error);
+            }
+        }
+
+        function updateDisplay() {
+            const output = document.querySelector('.js-time .js-time__label');
+            if (!output) return;
+
+            if (timeJST < timeP1Start) {
+                const different = timeP1Start - timeJST;
+
+                const hours = Math.floor(different / 1000 / 60 / 60);
+                const minutes = Math.floor((different / 1000 / 60) % 60);
+                const seconds = Math.floor((different / 1000) % 60);
+
+                output.textContent =
+                    `Time until the event starts: ${hours}h ${minutes}m ${seconds}s`;
+                return;
+            }
+
+            if (timeJST >= timeP1Start && timeJST < timeP2Start) {
+                const different = timeP2Start - timeJST;
+
+                const hours = Math.floor(different / 1000 / 60 / 60);
+                const minutes = Math.floor((different / 1000 / 60) % 60);
+                const seconds = Math.floor((different / 1000) % 60);
+
+                output.textContent =
+                    `Phase 1 has started! Time left: ${hours}h ${minutes}m ${seconds}s`;
+                GLOBAL_phase = 1;
+                return;
+            }
+
+            if (timeJST >= timeP2Start) {
+                const different = timeP2End - timeJST;
+
+                const hours = Math.floor(different / 1000 / 60 / 60);
+                const minutes = Math.floor((different / 1000 / 60) % 60);
+                const seconds = Math.floor((different / 1000) % 60);
+
+                output.textContent =
+                    `Phase 2 has started! Time left: ${hours}h ${minutes}m ${seconds}s`;
+                GLOBAL_phase = 2;
+                return;
+            }
+        }
+
+        setInterval(() => {
+            timeJST = new Date(timeJST.getTime() + 1000);
+            updateDisplay();
+        }, 1000);
+
+        setInterval(fetchTime, 300000);
+        fetchTime();
+    }
+
+    function generate() {
+        const link = document.querySelector('.js-link__toggle');
+        const timer = document.querySelector('.js-link__timer');
+
+        if (!link || !timer) return;
+
+        let clickCount = 0; // count user clicks
+        let longCooldown = false; // flag for long break
+
+        timer.textContent = 'Ready!';
+
+        link.onclick = function(e) {
+            e.preventDefault();
+            if (longCooldown) return;
+            clickCount++;
+            const src = link.getAttribute('data-link-src');
+            window.open(src, '_blank');
+            let seconds = Math.floor(Math.random() * (30 - 15 + 1)) + 15;
+            link.style.pointerEvents = 'none';
+            link.style.opacity = '0.5';
+            timer.textContent = `${seconds} seconds left to tweet (to avoid flagged as spam)`;
+            const shortCountdown = setInterval(() => {
+                seconds--;
+                if (seconds > 0) {
+                    timer.textContent = `${seconds} seconds left to tweet (to avoid flagged as spam)`;
+                } else {
+                    clearInterval(shortCountdown);
+                    timer.textContent = 'Ready!';
+                    link.style.pointerEvents = '';
+                    link.style.opacity = '';
+                }
+            }, 1000);
+            if (clickCount >= 5) {
+                longCooldown = true;
+                clickCount = 0; 
+                let longSeconds = Math.floor(Math.random() * (10 * 60 - 5 * 60 + 1)) + 5 * 60;
+                link.style.pointerEvents = 'none';
+                link.style.opacity = '0.5';
+                const longCountdown = setInterval(() => {
+                    longSeconds--;
+                    let minutesLeft = Math.ceil(longSeconds / 60);
+                    timer.textContent = `Pause, it's time for a break! This will avoid your account from being flagged as a bot! Wait for ${minutesLeft} minute(s) to tweet again`;
+                    if (longSeconds <= 0) {
+                        clearInterval(longCountdown);
+                        longCooldown = false;
+                        timer.textContent = 'Ready!';
+                        link.style.pointerEvents = '';
+                        link.style.opacity = '';
+                    }
+                }, 1000);
+            }
+        };
+    }
+    countdown();
+    generate();
+</script>
+
+</html>
