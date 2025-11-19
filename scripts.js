@@ -5,9 +5,9 @@ const GLOBAL = {
 };
 
 const GLOBAL_TIMES = {
-    phase1Start: new Date('2025-11-18 17:00:00'),
-    phase2Start: new Date('2025-11-18 17:15:01'),
-    phase2End: new Date('2025-11-19 00:00:00')
+    phase1Start: new Date('2025-11-19 16:00:00'),
+    phase2Start: new Date('2025-11-19 16:15:01'),
+    phase2End: new Date('2025-11-20 00:00:00')
 };
 
 const GLOBAL_SELECTORS = {
