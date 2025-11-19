@@ -81,7 +81,20 @@ main {
     list-style: none;
 }
 
-.section-top-generate {
+.section-top-live__frame {
+    position: relative;
+    padding-top: calc(1080 / 1920 * 100%);
+}
+
+.section-top-live__frame iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
 }
 
 .breaker-top-primary {
