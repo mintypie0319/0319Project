@@ -155,12 +155,13 @@ function setDOM() {
 
     formButton.addEventListener('click', function (e) {
         const username = formInput.value.trim();
+        const frame = document.querySelector(GLOBAL_SELECTORS.formCheck + ' iframe');
         if (!username) {
             e.preventDefault();
             alert('Please enter a username first.');
             return;
         }
-        window.open('https://shadowban.yuzurisa.com/' + encodeURIComponent(username), '_blank');
+        frame.setAttribute('src', 'https://shadowban.yuzurisa.com/' + encodeURIComponent(username));
     });
 }
 

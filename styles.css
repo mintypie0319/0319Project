@@ -192,6 +192,20 @@ main {
     text-decoration: none;
 }
 
+.form-top-check__frame {
+    width: 100%;
+    height: 400rem;
+    margin-top: 10rem;
+    position: relative;
+}
+
+.form-top-check__frame iframe {
+    width: 100%;
+    height: 100%;
+    border: 1px solid lightgray;
+    padding: 5rem;
+}
+
 .form-top-check__tutorial {
     width: 100%;
     margin-top: 10rem;
