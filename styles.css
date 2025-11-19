@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&family=Noto+Sans+SC:wght@100..900&display=swap');
 
+* {
+    box-sizing: border-box;
+}
+
 body {
     font-size: 16rem;
     line-height: calc(24 / 16);
@@ -198,8 +202,10 @@ main {
 
 .form-top-check__tutorial img {
     width: 100%;
+    min-width: auto;
     height: auto;
     margin: 15rem 0;
+    display: block;
     border: 1px solid lightgray;
     background-color: white;
     padding: 5rem;
@@ -227,7 +233,7 @@ main {
 
 @media (max-width: 767.98px) {
     html {
-        font-size: calc(100vw / 375);
+        font-size: calc(100vw / 414);
     }
 
     .title-top-primary {
