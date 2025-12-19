@@ -1,7 +1,7 @@
 const GLOBAL = {
     phase: 0,
     contentPrefix: 'https://x.com/intent/tweet?text=',
-    contentSuffix: '%23%E3%81%9D%E3%82%8C%E3%82%B9%E3%83%8E%0A%23%E5%AE%AE%E8%84%87%E5%92%B2%E8%89%AF%23%E3%81%9D%E3%82%8C%E3%82%B9%E3%83%8E%20%23%E5%AE%AE%E8%84%87%E5%92%B2%E8%89%AF'
+    contentSuffix: '%23それスノ%20%23宮脇咲良'
 };
 
 const GLOBAL_TIMES = {
