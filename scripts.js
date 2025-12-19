@@ -1,13 +1,13 @@
 const GLOBAL = {
     phase: 0,
     contentPrefix: 'https://x.com/intent/tweet?text=',
-    contentSuffix: '%0A%0ASAKURA%20Dream%20To%20Tokyo%20Dome%0A%23IntoSAKURADreamWorld%0A%23%E5%AE%AE%E8%84%87%E5%92%B2%E8%89%AF'
+    contentSuffix: '%23%E3%81%9D%E3%82%8C%E3%82%B9%E3%83%8E%0A%23%E5%AE%AE%E8%84%87%E5%92%B2%E8%89%AF%23%E3%81%9D%E3%82%8C%E3%82%B9%E3%83%8E%20%23%E5%AE%AE%E8%84%87%E5%92%B2%E8%89%AF'
 };
 
 const GLOBAL_TIMES = {
-    phase1Start: new Date('2025-11-19 16:00:00'),
-    phase2Start: new Date('2025-11-19 16:15:01'),
-    phase2End: new Date('2025-11-20 00:00:00')
+    phase1Start: new Date('2025-12-19 18:00:00'),
+    phase2Start: new Date('2025-12-19 16:30:01'),
+    phase2End: new Date('2025-12-20 00:00:00')
 };
 
 const GLOBAL_SELECTORS = {
