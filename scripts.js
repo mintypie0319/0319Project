@@ -1,7 +1,7 @@
 const GLOBAL = {
     phase: 0,
     contentPrefix: 'https://x.com/intent/tweet?text=',
-    contentSuffix: '%0A%0ASAKURA%20Dream%20To%20Tokyo%20Dome%0A%23IntoSAKURADreamWorld%0A%23%E5%AE%AE%E8%84%87%E5%92%B2%E8%89%AF'
+    contentSuffix: '%23それスノ%20%23宮脇咲良'
 };
 
 const GLOBAL_TIMES = {
