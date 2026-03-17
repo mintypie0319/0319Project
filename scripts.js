@@ -5,8 +5,8 @@ const GLOBAL = {
 };
 
 const GLOBAL_TIMES = {
-    phase1Start: new Date('2026-03-16 23:00:00'),
-    phase2Start: new Date('2026-03-16 23:15:01'),
+    phase1Start: new Date('2026-03-18 23:00:00'),
+    phase2Start: new Date('2026-03-18 23:15:01'),
     phase2End: new Date('2026-03-20 00:00:00')
 };
 
