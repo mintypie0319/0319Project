@@ -5,9 +5,9 @@ const GLOBAL = {
 };
 
 const GLOBAL_TIMES = {
-    phase1Start: new Date('2025-11-19 16:00:00'),
-    phase2Start: new Date('2025-11-19 16:15:01'),
-    phase2End: new Date('2025-11-20 00:00:00')
+    phase1Start: new Date('2026-03-18 23:00:00'),
+    phase2Start: new Date('2026-03-18 23:15:01'),
+    phase2End: new Date('2026-03-20 00:00:00')
 };
 
 const GLOBAL_SELECTORS = {
@@ -137,7 +137,7 @@ function setDOM() {
         GLOBAL_CLICKEDTIMES++;
         setCountdown();
     }));
-    
+
     links.forEach(link => link.addEventListener('click', () => {
         if (GLOBAL_ISCOUNTDOWNSTARTED) return;
 
@@ -173,10 +173,10 @@ function setCountdown() {
     const threshold = Math.floor(Math.random() * 11) + 10;
 
     if (GLOBAL_CLICKEDTIMES > threshold) {
-        duration = Math.floor(Math.random() * (480 - 180 + 1)) + 180;
+        duration = Math.floor(Math.random() * (6 - 3 + 1)) + 3;
         GLOBAL_CLICKEDTIMES = 0;
     } else {
-        duration = Math.floor(Math.random() * 11) + 10;
+        duration = Math.floor(Math.random() * (6 - 3 + 1)) + 3;
     }
 
     setLabel(`${duration} ${GLOBAL_LABELS.cooldown}`);
