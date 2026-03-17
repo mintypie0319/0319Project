@@ -1,12 +1,12 @@
 const GLOBAL = {
     phase: 0,
     contentPrefix: 'https://x.com/intent/tweet?text=',
-    contentSuffix: '%23それスノ%20%23宮脇咲良'
+    contentSuffix: 'Under%20the%20SAKURA%20Moonlight%0A%23SAKURACelebramus%0A%23%EC%98%A8%EC%84%B8%EC%83%81%EC%97%90_%EC%82%AC%EC%BF%A0%EB%9D%BC_%ED%94%BC%EC%96%B4%EB%82%98'
 };
 
 const GLOBAL_TIMES = {
-    phase1Start: new Date('2026-03-18 23:00:00'),
-    phase2Start: new Date('2026-03-18 23:15:01'),
+    phase1Start: new Date('2026-03-16 23:00:00'),
+    phase2Start: new Date('2026-03-16 23:15:01'),
     phase2End: new Date('2026-03-20 00:00:00')
 };
 
